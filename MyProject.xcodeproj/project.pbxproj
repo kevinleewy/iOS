@@ -15,6 +15,20 @@
 		3D155D32206F225E0097B508 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D155D30206F225E0097B508 /* LaunchScreen.storyboard */; };
 		3D155D3D206F225E0097B508 /* MyProjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D155D3C206F225E0097B508 /* MyProjectTests.swift */; };
 		3D155D48206F225F0097B508 /* MyProjectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D155D47206F225F0097B508 /* MyProjectUITests.swift */; };
+		3D155D56206F2FF90097B508 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D155D55206F2FF90097B508 /* GameScene.swift */; };
+		3D155D94206FFF5A0097B508 /* SCNCreature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D155D93206FFF5A0097B508 /* SCNCreature.swift */; };
+		3D155D9620705E7B0097B508 /* SCNCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D155D9520705E7B0097B508 /* SCNCard.swift */; };
+		3D155D9820706A4A0097B508 /* Anchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D155D9720706A4A0097B508 /* Anchor.swift */; };
+		3DA937172071BD3A0065E7E5 /* JSONData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA937162071BD3A0065E7E5 /* JSONData.swift */; };
+		3DA9371A2071BFA10065E7E5 /* ivysaur.json in Resources */ = {isa = PBXBuildFile; fileRef = 3DA937192071BFA10065E7E5 /* ivysaur.json */; };
+		3DA9371C2071C01A0065E7E5 /* wolf.json in Resources */ = {isa = PBXBuildFile; fileRef = 3DA9371B2071C01A0065E7E5 /* wolf.json */; };
+		3DA9371F2071C0D30065E7E5 /* dragon.json in Resources */ = {isa = PBXBuildFile; fileRef = 3DA9371D2071C0D30065E7E5 /* dragon.json */; };
+		3DA937202071C0D30065E7E5 /* bear.json in Resources */ = {isa = PBXBuildFile; fileRef = 3DA9371E2071C0D30065E7E5 /* bear.json */; };
+		3DA937222072F3200065E7E5 /* SCNField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA937212072F3200065E7E5 /* SCNField.swift */; };
+		3DA93724207300B90065E7E5 /* SCNPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA93723207300B90065E7E5 /* SCNPlayer.swift */; };
+		3DA9372620731FF60065E7E5 /* SCNHand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA9372520731FF60065E7E5 /* SCNHand.swift */; };
+		3DA93728207326AF0065E7E5 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA93727207326AF0065E7E5 /* Util.swift */; };
+		3DA9372A207337B10065E7E5 /* audio in Resources */ = {isa = PBXBuildFile; fileRef = 3DA93729207337B10065E7E5 /* audio */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +63,20 @@
 		3D155D43206F225F0097B508 /* MyProjectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyProjectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D155D47206F225F0097B508 /* MyProjectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProjectUITests.swift; sourceTree = "<group>"; };
 		3D155D49206F225F0097B508 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3D155D55206F2FF90097B508 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
+		3D155D93206FFF5A0097B508 /* SCNCreature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNCreature.swift; sourceTree = "<group>"; };
+		3D155D9520705E7B0097B508 /* SCNCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNCard.swift; sourceTree = "<group>"; };
+		3D155D9720706A4A0097B508 /* Anchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchor.swift; sourceTree = "<group>"; };
+		3DA937162071BD3A0065E7E5 /* JSONData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONData.swift; sourceTree = "<group>"; };
+		3DA937192071BFA10065E7E5 /* ivysaur.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ivysaur.json; sourceTree = "<group>"; };
+		3DA9371B2071C01A0065E7E5 /* wolf.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = wolf.json; sourceTree = "<group>"; };
+		3DA9371D2071C0D30065E7E5 /* dragon.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dragon.json; sourceTree = "<group>"; };
+		3DA9371E2071C0D30065E7E5 /* bear.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = bear.json; sourceTree = "<group>"; };
+		3DA937212072F3200065E7E5 /* SCNField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNField.swift; sourceTree = "<group>"; };
+		3DA93723207300B90065E7E5 /* SCNPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNPlayer.swift; sourceTree = "<group>"; };
+		3DA9372520731FF60065E7E5 /* SCNHand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNHand.swift; sourceTree = "<group>"; };
+		3DA93727207326AF0065E7E5 /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
+		3DA93729207337B10065E7E5 /* audio */ = {isa = PBXFileReference; lastKnownFileType = folder; path = audio; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,10 +127,21 @@
 		3D155D24206F225E0097B508 /* MyProject */ = {
 			isa = PBXGroup;
 			children = (
+				3DA937182071BF730065E7E5 /* json */,
 				3D155D25206F225E0097B508 /* AppDelegate.swift */,
-				3D155D27206F225E0097B508 /* art.scnassets */,
+				3D155D9720706A4A0097B508 /* Anchor.swift */,
+				3D155D55206F2FF90097B508 /* GameScene.swift */,
 				3D155D29206F225E0097B508 /* ViewController.swift */,
+				3DA937162071BD3A0065E7E5 /* JSONData.swift */,
+				3D155D9520705E7B0097B508 /* SCNCard.swift */,
+				3D155D93206FFF5A0097B508 /* SCNCreature.swift */,
+				3DA937212072F3200065E7E5 /* SCNField.swift */,
+				3DA93723207300B90065E7E5 /* SCNPlayer.swift */,
+				3DA9372520731FF60065E7E5 /* SCNHand.swift */,
+				3DA93727207326AF0065E7E5 /* Util.swift */,
 				3D155D2B206F225E0097B508 /* Main.storyboard */,
+				3DA93729207337B10065E7E5 /* audio */,
+				3D155D27206F225E0097B508 /* art.scnassets */,
 				3D155D2E206F225E0097B508 /* Assets.xcassets */,
 				3D155D30206F225E0097B508 /* LaunchScreen.storyboard */,
 				3D155D33206F225E0097B508 /* Info.plist */,
@@ -126,6 +165,17 @@
 				3D155D49206F225F0097B508 /* Info.plist */,
 			);
 			path = MyProjectUITests;
+			sourceTree = "<group>";
+		};
+		3DA937182071BF730065E7E5 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				3DA937192071BFA10065E7E5 /* ivysaur.json */,
+				3DA9371B2071C01A0065E7E5 /* wolf.json */,
+				3DA9371E2071C0D30065E7E5 /* bear.json */,
+				3DA9371D2071C0D30065E7E5 /* dragon.json */,
+			);
+			path = json;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,8 +286,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D155D28206F225E0097B508 /* art.scnassets in Resources */,
+				3DA9371C2071C01A0065E7E5 /* wolf.json in Resources */,
+				3DA9371F2071C0D30065E7E5 /* dragon.json in Resources */,
+				3DA9372A207337B10065E7E5 /* audio in Resources */,
+				3DA937202071C0D30065E7E5 /* bear.json in Resources */,
 				3D155D32206F225E0097B508 /* LaunchScreen.storyboard in Resources */,
 				3D155D2F206F225E0097B508 /* Assets.xcassets in Resources */,
+				3DA9371A2071BFA10065E7E5 /* ivysaur.json in Resources */,
 				3D155D2D206F225E0097B508 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -263,7 +318,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3DA93728207326AF0065E7E5 /* Util.swift in Sources */,
+				3D155D94206FFF5A0097B508 /* SCNCreature.swift in Sources */,
+				3DA937222072F3200065E7E5 /* SCNField.swift in Sources */,
+				3D155D56206F2FF90097B508 /* GameScene.swift in Sources */,
+				3DA9372620731FF60065E7E5 /* SCNHand.swift in Sources */,
+				3DA93724207300B90065E7E5 /* SCNPlayer.swift in Sources */,
+				3D155D9620705E7B0097B508 /* SCNCard.swift in Sources */,
 				3D155D2A206F225E0097B508 /* ViewController.swift in Sources */,
+				3DA937172071BD3A0065E7E5 /* JSONData.swift in Sources */,
+				3D155D9820706A4A0097B508 /* Anchor.swift in Sources */,
 				3D155D26206F225E0097B508 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

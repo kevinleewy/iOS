@@ -1,0 +1,8 @@
+{
+    "name" : "Ivysaur",
+    "scene" : "art.scnassets/ivysaur/ivysaur.dae",
+    "card_image" : "card_creature_ivysaur",
+    "large_card_image" : "card_creature_ivysaur_large",
+    "sound_file" : "audio/ivysaur.mp3",
+    "scale" : 0.5
+}

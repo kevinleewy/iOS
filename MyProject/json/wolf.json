@@ -1,0 +1,8 @@
+{
+    "name" : "Wolf",
+    "scene" : "art.scnassets/wolf/wolf.dae",
+    "card_image" : "card_creature_wolf",
+    "large_card_image" : "card_creature_wolf_large",
+    "sound_file" : "audio/wolf_howl.wav",
+    "scale" : 0.5
+}
