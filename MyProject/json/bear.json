@@ -1,0 +1,8 @@
+{
+    "name" : "Bear",
+    "scene" : "",
+    "card_image" : "card_creature_bear",
+    "large_card_image" : "card_creature_bear_large",
+    "sound_file" : "audio/bear_growl.wav",
+    "scale" : 1.0
+}
