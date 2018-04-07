@@ -13,6 +13,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet var sceneView: ARSCNView!
     let configuration = ARWorldTrackingConfiguration()
     var isWorldSetUp = false
+    var turn = true;
     
     var player1: SCNPlayer?
     var player2: SCNPlayer?
@@ -69,7 +70,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self.player1 = SCNPlayer(scene: scene, depth: 0.0)
         scene.rootNode.addChildNode(self.player1!)
         
-        self.player2 = SCNPlayer(scene: scene, depth: -10.0)    //10 meters deep
+        self.player2 = SCNPlayer(scene: scene, depth: -8.0)    //8 meters deep
         self.player2?.eulerAngles = SCNVector3(0.degreesToRadians, 180.degreesToRadians, 0.degreesToRadians)
         scene.rootNode.addChildNode(self.player2!)
         
@@ -198,14 +199,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     @IBAction func drawAction(_ sender: Any) {
         NSLog("Drawing a card")
-        self.player1!.getHand().draw()
+        if turn {
+            self.player1!.getHand().draw()
+        } else {
+            self.player2!.getHand().draw()
+        }
+        turn = !turn;
         //draw()
     }
     
     @IBAction func AttackAction(_ sender: Any) {
-        NSLog((self.sceneView.session.currentFrame?.camera.transform.columns.3.debugDescription)!)
-        self.player1!.getField().getCreature(slot: 0)?.attack(target: self.player2!.getField().getCreature(slot: 1)!)
-        self.player2!.getField().getCreature(slot: 0)?.attack(target: self.player1!.getField().getCreature(slot: 2)!)
+        //NSLog((self.sceneView.session.currentFrame?.camera.transform.columns.3.debugDescription)!)
+        if turn {
+            self.player1!.getField().getCreature(slot: 0)?.attack(target: self.player2!.getField().getCreature(slot: 1)!)
+        } else {
+            self.player2!.getField().getCreature(slot: 0)?.attack(target: self.player1!.getField().getCreature(slot: 2)!)
+        }
     }
     
     

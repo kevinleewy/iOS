@@ -18,7 +18,7 @@ class SCNHand: SCNNode {
         self.scene = scene
         self.hand = []
         super.init()
-        self.position = SCNVector3(x: 0.0, y: 0.0, z: -2.0)
+        self.position = SCNVector3(x: 0.0, y: 0.0, z: -0.2)
     }
     
     required init(coder x: NSCoder){

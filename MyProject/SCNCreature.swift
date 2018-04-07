@@ -57,9 +57,11 @@ class SCNCreature: SCNNode {
     
     func attack(target: SCNCreature){
         let newAttackParticles = self.attackParticles.clone()
-        newAttackParticles.position = SCNVector3(self.position.x, self.position.y+0.3, self.position.z)
-        let targetPosition = SCNVector3(target.position.x, target.position.y+0.3, target.position.z)
-
+        newAttackParticles.transform = self.worldTransform
+        newAttackParticles.transform.m42 += 0.3 //raise height by 30cm
+        let targetTransform = target.worldTransform
+        let targetPosition = SCNVector3(targetTransform.m41, targetTransform.m42+0.3, targetTransform.m43)
+        
         self.scene.rootNode.addChildNode(newAttackParticles)
         newAttackParticles.runAction(SCNAction.sequence([
             SCNAction.fadeIn(duration: 0.5),
