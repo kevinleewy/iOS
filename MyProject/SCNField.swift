@@ -47,6 +47,7 @@ class SCNField: SCNNode {
         creature.position = SCNVector3(x: -4.0 + SCNField.CREATURE_CENTROID_GAP * Float(slot), y: 0.0, z: 0.0)
         self.addChildNode(creature)
         //add creature.appear()
+        creature.summon();
         return true
     }
     
