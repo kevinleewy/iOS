@@ -44,6 +44,7 @@ class SCNField: SCNNode {
             creatures[slot] == nil else { return false }
         
         creatures[slot] = creature
+        creature.slot = slot
         creature.position = SCNVector3(x: -4.0 + SCNField.CREATURE_CENTROID_GAP * Float(slot), y: 0.0, z: 0.0)
         self.addChildNode(creature)
         //add creature.appear()
@@ -65,8 +66,26 @@ class SCNField: SCNNode {
         return true
     }
     
+    public func hasCreatures() -> Bool {
+        for creature in creatures {
+            if creature != nil{
+                return true
+            }
+        }
+        return false
+    }
+    
     public func getCreature(slot: Int) -> SCNCreature? {
         return creatures[slot]
+    }
+    
+    public func getLeftMostCreature() -> SCNCreature? {
+        for creature in creatures {
+            if creature != nil {
+                return creature
+            }
+        }
+        return nil
     }
     
     public func getCreatures() -> [SCNCreature?] {

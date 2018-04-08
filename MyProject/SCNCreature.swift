@@ -17,6 +17,7 @@ class SCNCreature: SCNNode {
     let opponentOri: SCNVector3 = SCNVector3(0.degreesToRadians, 180.degreesToRadians, 0.degreesToRadians)
     
     var scene: SCNScene
+    var slot: Int = -1
     var attackParticles: SCNNode
     
     init(name: String, daeFilename: String, scene: SCNScene) {
@@ -69,9 +70,40 @@ class SCNCreature: SCNNode {
             SCNAction.fadeOut(duration: 0.5),
             SCNAction.removeFromParentNode()
         ]))
+
         target.runAction(SCNAction.sequence([
             SCNAction.wait(duration: 2.5),
-            SCNAction.rotateBy(x: 0, y: 360.degreesToRadians, z: 0, duration: 0.5)
+            SCNAction.rotateBy(x: 0, y: 360.degreesToRadians, z: 0, duration: 0.5),
+            SCNAction.fadeOut(duration: 1.0),
+            SCNAction.run({node in
+                let creatureNode = node as! SCNCreature
+                let field = node.parent as! SCNField
+                _ = field.removeCreature(slot: creatureNode.slot)
+            })
+        ]))
+    }
+    
+    func attackPlayer(target: SCNPlayer){
+        let newAttackParticles = self.attackParticles.clone()
+        newAttackParticles.transform = self.worldTransform
+        newAttackParticles.transform.m42 += 0.3 //raise height by 30cm
+        let targetTransform = target.worldTransform
+        let targetPosition = SCNVector3(targetTransform.m41, targetTransform.m42, targetTransform.m43)
+        
+        self.scene.rootNode.addChildNode(newAttackParticles)
+        newAttackParticles.runAction(SCNAction.sequence([
+            SCNAction.fadeIn(duration: 0.5),
+            SCNAction.move(to: targetPosition, duration: 2),
+            SCNAction.fadeOut(duration: 0.5),
+            SCNAction.removeFromParentNode()
+            ]))
+
+        target.runAction(SCNAction.sequence([
+            SCNAction.wait(duration: 2.5),
+            SCNAction.run({node in
+                let playerNode = node as! SCNPlayer
+                playerNode.getLife().loseLife(amount: 1)
+            })
         ]))
     }
 

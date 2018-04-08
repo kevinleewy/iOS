@@ -211,9 +211,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBAction func AttackAction(_ sender: Any) {
         //NSLog((self.sceneView.session.currentFrame?.camera.transform.columns.3.debugDescription)!)
         if turn {
-            self.player1!.getField().getCreature(slot: 0)?.attack(target: self.player2!.getField().getCreature(slot: 1)!)
+            if self.player2!.getField().hasCreatures() {
+                self.player1!.getField().getLeftMostCreature()?.attack(target: self.player2!.getField().getLeftMostCreature()!)
+            } else {
+                self.player1!.getField().getLeftMostCreature()?.attackPlayer(target: self.player2!)
+            }
         } else {
-            self.player2!.getField().getCreature(slot: 0)?.attack(target: self.player1!.getField().getCreature(slot: 2)!)
+            if self.player1!.getField().hasCreatures() {
+                self.player2!.getField().getLeftMostCreature()?.attack(target: self.player1!.getField().getLeftMostCreature()!)
+            } else {
+                self.player2!.getField().getLeftMostCreature()?.attackPlayer(target: self.player1!)
+            }
         }
     }
     
