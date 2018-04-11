@@ -2,7 +2,7 @@
 //  SCNLife.swift
 //  MyProject
 //
-//  Created by Holly Liang on 4/7/18.
+//  Created by Kevin Lee on 4/7/18.
 //  Copyright © 2018 Kevin Lee. All rights reserved.
 //
 
@@ -17,24 +17,29 @@ class SCNLife: SCNNode {
     static let INITIAL_LIFE: Int = 3
     static let ICON_GAP: Float = 0.6 //40cm
     
-    init(scene: SCNScene) {
+    init(config: Int, scene: SCNScene) {
+        NSLog("Building life with \(config)")
         self.scene = scene
-        life = SCNLife.INITIAL_LIFE
+        self.life = config
         
         self.icons = []
         super.init()
         var pos = -SCNLife.ICON_GAP * Float(SCNLife.INITIAL_LIFE - 1)/2
-        for _ in 0..<SCNLife.INITIAL_LIFE {
+        for i in 0..<SCNLife.INITIAL_LIFE {
             let icon = SCNNode()
             icon.geometry = SCNBox(width: 0.2, height: 0.2, length: 0.2, chamferRadius: 0.2)
             icon.geometry?.firstMaterial?.diffuse.contents = UIColor.magenta
             icon.position = SCNVector3(x: pos, y: 0.0, z: 0.0)
-            icon.opacity = 1.0
+            if i < self.life {
+                icon.opacity = 1.0
+            } else {
+                icon.opacity = 0.0
+            }
             icons.append(icon)
             pos += SCNLife.ICON_GAP
             self.addChildNode(icon)
         }
-        self.position = SCNVector3(x: 0.0, y: 0.5, z: -1.0)
+        self.position = SCNVector3(x: 0.0, y: 0.5, z: -1.5)
     }
     
     required init(coder x: NSCoder){

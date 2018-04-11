@@ -15,11 +15,16 @@ class SCNPlayer: SCNNode {
     private var hand : SCNHand
     private var life : SCNLife
     
-    init(scene: SCNScene, depth: Float) {
+    init(config: [String: Any], scene: SCNScene, depth: Float) {
+        
+        let handConf = config["hand"] as! [Int]
+        let fieldConf = config["field"] as! [Int]
+        let lifeConf = config["life"] as! Int
+        
         self.scene = scene
-        self.field = SCNField(scene: scene)
-        self.hand  = SCNHand(scene: scene)
-        self.life  = SCNLife(scene: scene)
+        self.field = SCNField(config: fieldConf, scene: scene)
+        self.hand  = SCNHand(config: handConf, scene: scene)
+        self.life  = SCNLife(config: lifeConf, scene: scene)
         super.init()
         self.position = SCNVector3(x: 0.0, y: 0.0, z: depth)
         self.addChildNode(self.field)

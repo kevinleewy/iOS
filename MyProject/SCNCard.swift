@@ -11,7 +11,8 @@ import ARKit
 enum CardType :Int {
     case wolf,
     bear,
-    dragon
+    dragon,
+    ivysaur
 }
 
 enum CardState :Int {
@@ -75,6 +76,10 @@ class SCNCard : SCNNode {
                 self.textureFilename = "card_creature_dragon"
                 self.largeTextureFilename = "card_creature_dragon_large"
                 self.soundFilename = "dragon-roar.wav"
+            case .ivysaur:
+                self.textureFilename = "card_creature_ivysaur"
+                self.largeTextureFilename = "card_creature_ivysaur_large"
+                self.soundFilename = "ivysaur.mp3"
         }
         
         frontTexture = SKTexture(imageNamed: self.textureFilename)
@@ -96,6 +101,8 @@ class SCNCard : SCNNode {
                 self.name = "Bear"
             case .dragon:
                 self.name = "Dragon"
+            case .ivysaur:
+                self.name = "Ivysaur"
         }
         
         self.geometry = SCNPlane(width: SCNCard.CARD_WIDTH, height: SCNCard.CARD_HEIGHT)
@@ -118,6 +125,8 @@ class SCNCard : SCNNode {
                 self.cardType = .bear
             case "Dragon":
                 self.cardType = .dragon
+            case "Ivysaur":
+                self.cardType = .ivysaur
             default:
                 self.cardType = .dragon     //temporary
         }

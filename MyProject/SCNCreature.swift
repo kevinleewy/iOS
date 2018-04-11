@@ -40,9 +40,6 @@ class SCNCreature: SCNNode {
             self.addChildNode(childNode as SCNNode)
         }
         
-        //let depth = ownerIsMe ? myDepth : opponentDepth
-        //self.eulerAngles = ownerIsMe ? myOri : opponentOri
-        //self.position = SCNVector3(x: x, y: -2, z: depth)
         self.scale = SCNVector3(x: 0.5, y: 0.5, z: 0.5)
         self.opacity = 0.0
         

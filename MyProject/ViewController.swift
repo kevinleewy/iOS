@@ -7,9 +7,41 @@
 //
 
 import ARKit
+import SocketIO
+
+// Struct for parsed JSON data ------------------------------------
+
+struct NewsAPIStruct:Decodable {
+    let headlines:[Headlines];
+}
+
+struct Headlines:Decodable {
+    let newsgroupID:Int;
+    let newsgroup: String;
+    let headline: String;
+    
+    init (json: [String: Any]) {
+        newsgroupID = json ["newsgroupID"] as? Int ?? -1;
+        newsgroup = json ["newsgroup"] as? String ?? "";
+        headline = json ["headline"] as? String ?? "";
+    };
+};
+
+struct GameState:Decodable {
+    let gameID: Int;
+    let newsgroup: String;
+    let headline: String;
+    
+    init (json: [String: Any]) {
+        gameID = json ["gameID"] as? Int ?? -1;
+        newsgroup = json ["newsgroup"] as? String ?? "";
+        headline = json ["headline"] as? String ?? "";
+    };
+};
 
 class ViewController: UIViewController, ARSCNViewDelegate {
 
+    @IBOutlet weak var connectButton: UIButton!
     @IBOutlet var sceneView: ARSCNView!
     let configuration = ARWorldTrackingConfiguration()
     var isWorldSetUp = false
@@ -18,23 +50,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var player1: SCNPlayer?
     var player2: SCNPlayer?
     
-    //var creatures: [SCNCreature] = []
-    //var hand: [SCNCard] = []
-    /*
-    func loadDae(name: String) -> SCNNode {
-        
-        guard let scene = SCNScene(named: name) else {
-            NSLog("Unable to load \(name)")
-            return SCNNode()
-        }
-        
-        let node = SCNNode()
-        for childNode in scene.rootNode.childNodes {
-            node.addChildNode(childNode as SCNNode)
-        }
-        return node
-    }*/
+    var manager: SocketManager?
+    var socket: SocketIOClient!
+    var host: String = ""
     
+    var DEBUG = true
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,37 +64,66 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Show statistics such as fps and timing information
         self.sceneView.showsStatistics = true
-        
-        //sight = SKSpriteNode(imageNamed: "sight")
-        //self.sceneView.scene.rootNode.
-        //self.sceneView.session.add(anchor: ARAnchor() addChild(sight)
+
+        // Establish connection with server
+        connectToServer()
         
     }
     
-    func setUpWorld(){
+    func debugprint(_ s:String){
+        print(s)
+    }
+    
+    func connectToServer() {
+        
+        DispatchQueue.main.async {
+            //1. Create the alert controller.
+            let alert = UIAlertController(title: "Connecting to Server", message: "Input IP of server", preferredStyle: .alert)
+            
+            //2. Add the text field. You can configure it however you need.
+            alert.addTextField { (textField) in
+                textField.text = "192.168.1.110"
+            }
+            
+            // 3. Grab the value from the text field, and print it when the user clicks OK.
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
+                let textField = alert?.textFields![0] // Force unwrapping because we know it exists.
+                self.host = (textField?.text)!
+                self.initSocket()   //initialize sockets
+            }))
+            
+            // 4. Present the alert.
+            UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    func initSocket(){
+        self.manager = SocketManager(socketURL: URL(string: "http://\(self.host):8080")!,config: [.log(false),.connectParams(["token": "Player1"])])
+        self.socket = manager?.defaultSocket
+        self.setSocketEvents()
+        self.socket.connect()
+    }
+    
+    func setUpWorld(config: [String: Any]){
+        
+        debugprint("Setting up world")
+        debugprint(config.description)
+        let p1conf = config["player1"] as! [String: Any]
+        let p2conf = config["player2"] as! [String: Any]
+        
         // Create a new scene
-        //let scene = SCNScene(named: "art.scnassets/ship.scn")!
         let scene = SCNScene()
         
         // Set the scene to the view
         sceneView.scene = scene
         
-        //let ship = scene.rootNode.childNode(withName: "ship", recursively: true)!
-        //ship.position = SCNVector3(x: 0, y: -0.5, z: -3)
-        //ship.eulerAngles = SCNVector3(0.degreesToRadians, 180.degreesToRadians, 0.degreesToRadians)
-        //ship.opacity = 0.0
-        //ship.transform = camera.transform
-        
-        //self.player1 = scene.rootNode.childNode(withName: "player1", recursively: true)!
-        //self.player2 = scene.rootNode.childNode(withName: "player2", recursively: true)!
-        
-        self.player1 = SCNPlayer(scene: scene, depth: 0.0)
+        self.player1 = SCNPlayer(config: p1conf, scene: scene, depth: 0.0)
         scene.rootNode.addChildNode(self.player1!)
         
-        self.player2 = SCNPlayer(scene: scene, depth: -8.0)    //8 meters deep
+        self.player2 = SCNPlayer(config: p2conf, scene: scene, depth: -8.0)    //8 meters deep
         self.player2?.eulerAngles = SCNVector3(0.degreesToRadians, 180.degreesToRadians, 0.degreesToRadians)
         scene.rootNode.addChildNode(self.player2!)
-        
+        /*
         var field: SCNField = self.player1!.getField()
         for i in 0...4 {
             let creature = SCNCreature(name: "Ally\(i)", daeFilename: "art.scnassets/ivysaur/ivysaur.dae", scene: scene)
@@ -89,76 +139,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 NSLog("Failed to add Enemy\(i)")
             }
         }
-        /*
-        creatures = []
-        
-        for i in 0...4 {
-            creatures.append(Creature(name: "Ally\(i)", x: -4.0 + 2.0 * Float(i), ownerIsMe: true))
-        }
-        
-        for i in 0...4 {
-            creatures.append(Creature(name: "Enemy\(i)", x: -4.0 + 2.0 * Float(i), ownerIsMe: false))
-        }
-        
-        for i in 0...9 {
-            creatures[i].summon(scene: scene)
-        }
-        */
-        //Build hand
-        //Card(cardType: .wolf)
-        //hand.append(.wolf)
-        //hand.append(.bear)
-        //hand.append(.dragon)
-        
-        //for (i, card) in hand.enumerated() {
-        //    let cardNode = Card(cardType: card, x: -0.1 + 0.1 * Float(i))
-        //    scene.rootNode.addChildNode(cardNode)
-        //}
-        /*
-        let wolf = loadDae(name: "art.scnassets/wolf/wolf.dae")
-        wolf.name = "wolf"
-        wolf.position = SCNVector3(x: -2, y: -0.5, z: -3)
-        wolf.eulerAngles = SCNVector3(0.degreesToRadians, 180.degreesToRadians, 0.degreesToRadians)
-        wolf.scale = SCNVector3(x: 0.5, y: 0.5, z: 0.5)
-        wolf.opacity = 0.0
-        scene.rootNode.addChildNode(wolf)
-        
-        let ivysaur = loadDae(name: "art.scnassets/ivysaur/ivysaur.dae")
-        ivysaur.name = "ivysaur"
-        ivysaur.position = SCNVector3(x: 2, y: -0.5, z: -1)
-        //ivysaur.eulerAngles = SCNVector3(0.degreesToRadians, 0.degreesToRadians, 0.degreesToRadians)
-        //ivysaur.scale = SCNVector3(x: 1, y: 1, z: 1)
-        ivysaur.opacity = 0.0
-        scene.rootNode.addChildNode(ivysaur)
-        
-        let plane = SCNNode()
-        plane.geometry = SCNPlane(width: 0.2, height: 0.2)
-        plane.geometry?.firstMaterial?.specular.contents = UIColor.orange
-        plane.geometry?.firstMaterial?.diffuse.contents = UIColor.blue
-        plane.position = SCNVector3(x: 0, y: 0, z: -1)
-        plane.eulerAngles = SCNVector3(90.degreesToRadians, 0.degreesToRadians, 0.degreesToRadians)
-        scene.rootNode.addChildNode(plane)
-        
-        let plane2 = SCNNode()
-        plane2.geometry = SCNPlane(width: 0.2, height: 0.2)
-        plane2.geometry?.firstMaterial?.specular.contents = UIColor.orange
-        plane2.geometry?.firstMaterial?.diffuse.contents = UIColor.blue
-        plane2.position = SCNVector3(x: 2, y: 0, z: -1)
-        plane2.eulerAngles = SCNVector3(90.degreesToRadians, 0.degreesToRadians, 0.degreesToRadians)
-        scene.rootNode.addChildNode(plane2)
-        
-        let helloText = SCNText(string: "Hello", extrusionDepth: 1)
-        let helloNode = SCNNode(geometry: helloText)
-        helloText.firstMaterial?.diffuse.contents = UIColor.purple
-        helloNode.position = SCNVector3(x: -5, y: 0.2, z: -5)
-        scene.rootNode.addChildNode(helloNode)
-        
-        let appearAction = SCNAction.group([SCNAction.fadeIn(duration: 2), SCNAction.move(by: SCNVector3(x: 0, y: 0.2, z: 0), duration: 2)])
-        
-        ship.runAction(appearAction)
-        wolf.runAction(appearAction)
-        ivysaur.runAction(appearAction)
-        */
+         */
     }
     
     func restartSession() {
@@ -167,45 +148,42 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             node.removeFromParentNode()
         }
         self.sceneView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+        self.isWorldSetUp = false
     }
-    /*
-    func draw() {
-        let cardType: CardType = CardType(rawValue: Int(arc4random_uniform(3)))!
-        let newCard: Card = Card(cardType: cardType)
-        newCard.opacity = 0
-        newCard.position = SCNVector3(x: 0.5, y: 0.0, z: -0.2)
-        hand.append(newCard)
-        self.sceneView.scene.rootNode.addChildNode(newCard)
-        
-        newCard.runAction(SCNAction.fadeIn(duration: 0.2))
-        
-        //reposition cards in hand
-        for (i, card) in hand.enumerated() {
-            let gap = 0.4/Float(hand.count + 1)
-            card.runAction(SCNAction.move(to: SCNVector3(x: -0.2+(1.0+Float(i))*gap, y: 0.0, z: -0.2+0.001*Float(i)), duration: 1))
+    
+    @IBAction func connectAction(_ sender: Any) {
+        if isWorldSetUp {
+            debugprint("Leaving game")
+            restartSession()
+            connectButton.setTitle("Join", for: .normal)
+        } else {
+            debugprint("Attempting to join game")
+            self.socket.emit("joinGame",[])
         }
-        
-    }*/
+    }
     
     @IBAction func summonAction(_ sender: Any) {
         if isWorldSetUp {
             restartSession()
         } else {
-            setUpWorld()
+            //setUpWorld([])
+            
         }
         
-        isWorldSetUp = !isWorldSetUp
+        //isWorldSetUp = !isWorldSetUp
+        //self.socket.emit("joinGame",[])
     }
     
     @IBAction func drawAction(_ sender: Any) {
         NSLog("Drawing a card")
-        if turn {
-            self.player1!.getHand().draw()
+        /*if turn {
+            self.player1!.getHand().draw(Int(arc4random_uniform(3)))
         } else {
-            self.player2!.getHand().draw()
+            self.player2!.getHand().draw(Int(arc4random_uniform(3)))
         }
-        turn = !turn;
-        //draw()
+        turn = !turn;*/
+
+        self.socket.emit("actionSelect", ["action":"draw"])
     }
     
     @IBAction func AttackAction(_ sender: Any) {
@@ -223,6 +201,109 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 self.player2!.getField().getLeftMostCreature()?.attackPlayer(target: self.player1!)
             }
         }
+        self.socket.emit("actionSelect", ["action":"attack"])
+    }
+    /*
+    func getHeadlines() {
+        
+        let jsonURLString:String = "http://\(self.host):3000/headlines/?token=ABC438s";
+        guard let url = URL(string: jsonURLString) else
+        {return}
+        
+        URLSession.shared.dataTask(with: url) { (data, response, err) in
+            
+            guard let data = data else { return }
+            
+            do {
+                let newsAPIStruct = try
+                    JSONDecoder().decode(NewsAPIStruct.self, from: data)
+                
+                for item in newsAPIStruct.headlines {
+                    NSLog(item.headline);
+                };
+                /*
+                DispatchQueue.main.async(execute: {
+                    self.tableView.reloadData()
+                })
+                */
+            } catch let jsonErr {
+                print ("error: ", jsonErr)
+            }
+        }.resume();
+    };*/
+    
+    private func setSocketEvents() {
+        self.socket.on(clientEvent: .connect) {data, ack in
+            print("socket connected");
+        };
+        
+        self.socket.on(clientEvent: .disconnect, callback: {data, ack in
+            print("socket disconnected");
+        });
+        
+        self.socket.on(clientEvent: .reconnect, callback: {data, ack in
+            print("socket reconnected");
+            self.debugprint("Attempting to reconnect to game")
+            self.restartSession()
+            self.socket.emit("joinGame",[])
+        });
+        
+        self.socket.on(clientEvent: .error, callback: {data, ack in
+            print("socket error");
+        });
+        /*
+        self.socket.on("headlines_updated") {data, ack in
+            self.getHeadlines();
+        };*/
+        
+        self.socket.on("joinedGame") {data, ack in
+            
+            let dataJSON = data[0] as! [String : Any]
+            
+            //print error and exit if any
+            if let status = dataJSON["status"] as? String {
+                if status == "error" {
+                    self.debugprint(dataJSON["value"].debugDescription)
+                    return
+                }
+            }
+            
+            self.debugprint("Joined game")
+            
+            if let config = dataJSON["value"] as? [String : Any] {
+                self.setUpWorld(config: config)
+                self.isWorldSetUp = true
+                self.connectButton.setTitle("Leave", for: .normal)
+            }
+        }
+        
+        self.socket.on("actionResponse") {data, ack in
+            self.debugprint(data.description);
+            let dataJSON = data[0] as! [String : Any]
+            
+            //print error and exit if any
+            if let status = dataJSON["status"] as? String {
+                if status == "error" {
+                    self.debugprint(dataJSON["value"].debugDescription)
+                    return
+                }
+            }
+            
+            if let val = dataJSON["value"] as? [String : Any] {
+                let event = val["event"] as? String
+                let playerId = val["player"] as? String
+
+                if event == "draw" {
+                    let cardId = val["result"] as! Int
+                    if playerId == "Player1"{
+                        self.player1?.getHand().draw(cardId)
+                    } else {
+                        self.player2?.getHand().draw(cardId)
+                    }
+                }
+            }
+        }
+        
     }
     
     

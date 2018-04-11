@@ -15,11 +15,28 @@ class SCNField: SCNNode {
     static let MAX_CREATURES: Int = 5
     static let CREATURE_CENTROID_GAP: Float = 2.0
     
-    init(scene: SCNScene) {
+    init(config: [Int], scene: SCNScene) {
+        NSLog("Building field with \(config.description)")
         self.scene = scene
         self.creatures = [SCNCreature?](repeating: nil, count: SCNField.MAX_CREATURES)
         super.init()
         self.position = SCNVector3(x: 0.0, y: -2.0, z: -2.0)
+        for (slot, creatureId) in config.enumerated() {
+            var dae: String
+            guard creatureId >= 0 else { continue }
+            
+            switch creatureId {
+                case 0:
+                    dae = "art.scnassets/wolf/wolf.dae"
+                default:
+                    dae = "art.scnassets/ivysaur/ivysaur.dae"
+            }
+
+            let creature = SCNCreature(name: "Ally\(slot)", daeFilename: dae, scene: scene)
+            if !self.addCreature(creature: creature, slot: slot) {
+                NSLog("Failed to add Ally\(slot)")
+            }
+        }
     }
     
     required init(coder x: NSCoder){

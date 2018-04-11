@@ -11,22 +11,27 @@ import ARKit
 class SCNHand: SCNNode {
     
     private var scene: SCNScene
-    private var hand: [SCNCard]
+    private var hand: [SCNCard?]
     static let HAND_WIDTH: Float = 0.4 //40cm
     
-    init(scene: SCNScene) {
+    init(config: [Int], scene: SCNScene) {
+        NSLog("Building hand with \(config.description)")
         self.scene = scene
         self.hand = []
+        
         super.init()
         self.position = SCNVector3(x: 0.0, y: 0.0, z: -0.2)
+        for card in config {
+            draw(card)
+        }
     }
     
     required init(coder x: NSCoder){
         fatalError("NSCoding not supported")
     }
     
-    public func draw(){
-        let cardType: CardType = CardType(rawValue: Int(arc4random_uniform(3)))!
+    public func draw(_ cardId:Int){
+        let cardType: CardType = CardType(rawValue: cardId)!
         let newCard: SCNCard = SCNCard(cardType: cardType)
         newCard.opacity = 0
         newCard.position = SCNVector3(x: 0.5, y: 0.0, z: 0.0)
@@ -39,7 +44,7 @@ class SCNHand: SCNNode {
         let gap = SCNHand.HAND_WIDTH / Float(hand.count + 1)
         let left = -SCNHand.HAND_WIDTH / 2
         for (i, card) in hand.enumerated() {
-            card.runAction(SCNAction.move(
+            card?.runAction(SCNAction.move(
                 to: SCNVector3(
                     x: left + (1.0 + Float(i)) * gap,
                     y: 0.0,
@@ -50,6 +55,15 @@ class SCNHand: SCNNode {
         }
     }
     
+    public func discard(_ slot:Int){
+        guard slot >= 0 && slot < self.hand.count else { return }
+        let card = self.hand[slot]
+        self.hand[slot] = nil
+        card?.runAction(SCNAction.fadeOut(duration: 1.0))
+        reorganize()
+        card?.removeFromParentNode()
+    }
+    
     public func reorganize(){
         self.hand = self.hand.compactMap { $0 } //remove nil elements
         
@@ -57,7 +71,7 @@ class SCNHand: SCNNode {
         let gap = SCNHand.HAND_WIDTH / Float(hand.count + 1)
         let left = -SCNHand.HAND_WIDTH / 2
         for (i, card) in hand.enumerated() {
-            card.runAction(SCNAction.move(
+            card?.runAction(SCNAction.move(
                 to: SCNVector3(
                     x: left + (1.0 + Float(i)) * gap,
                     y: 0.0,
