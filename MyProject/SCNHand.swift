@@ -65,7 +65,10 @@ class SCNHand: SCNNode {
     }
     
     public func reorganize(){
-        self.hand = self.hand.compactMap { $0 } //remove nil elements
+        //print("Before: \(self.hand.description)")
+        let newHand = self.hand.compactMap { $0 } //remove nil elements
+        //print("After: \(newHand.description)")
+        self.hand = newHand
         
         //reposition cards in hand
         let gap = SCNHand.HAND_WIDTH / Float(hand.count + 1)

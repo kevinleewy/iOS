@@ -47,4 +47,20 @@ class SCNPlayer: SCNNode {
     public func getLife() -> SCNLife {
         return self.life
     }
+    
+    public func playCard(cardId:Int, handSlot:Int, fieldSlot:Int){
+        
+        var dae: String
+        switch cardId {
+            case 0:
+                dae = "art.scnassets/wolf/wolf.dae"
+            default:
+                dae = "art.scnassets/ivysaur/ivysaur.dae"
+        }
+        hand.discard(handSlot)
+        let creature = SCNCreature(name: "Ally\(fieldSlot)", daeFilename: dae, scene: scene)
+        if !field.addCreature(creature: creature, slot: fieldSlot) {
+            NSLog("Failed to add Ally\(fieldSlot)")
+        }
+    }
 }

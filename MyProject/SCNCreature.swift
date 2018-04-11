@@ -53,7 +53,7 @@ class SCNCreature: SCNNode {
         self.runAction(summonAction)
     }
     
-    func attack(target: SCNCreature){
+    func attack(target: SCNCreature, destroyed: Int){
         let newAttackParticles = self.attackParticles.clone()
         newAttackParticles.transform = self.worldTransform
         newAttackParticles.transform.m42 += 0.3 //raise height by 30cm
@@ -68,19 +68,27 @@ class SCNCreature: SCNNode {
             SCNAction.removeFromParentNode()
         ]))
 
+        var destroyedAction:SCNAction = SCNAction()
+        if destroyed != 0 {
+            destroyedAction = SCNAction.sequence([
+                SCNAction.fadeOut(duration: 1.0),
+                SCNAction.run({node in
+                    let creatureNode = node as! SCNCreature
+                    let field = node.parent as! SCNField
+                    _ = field.removeCreature(slot: creatureNode.slot)
+                })
+            ])
+        }
+        
+        
         target.runAction(SCNAction.sequence([
             SCNAction.wait(duration: 2.5),
             SCNAction.rotateBy(x: 0, y: 360.degreesToRadians, z: 0, duration: 0.5),
-            SCNAction.fadeOut(duration: 1.0),
-            SCNAction.run({node in
-                let creatureNode = node as! SCNCreature
-                let field = node.parent as! SCNField
-                _ = field.removeCreature(slot: creatureNode.slot)
-            })
+            destroyedAction
         ]))
     }
     
-    func attackPlayer(target: SCNPlayer){
+    func attackPlayer(target: SCNPlayer, damage: Int){
         let newAttackParticles = self.attackParticles.clone()
         newAttackParticles.transform = self.worldTransform
         newAttackParticles.transform.m42 += 0.3 //raise height by 30cm
@@ -99,7 +107,7 @@ class SCNCreature: SCNNode {
             SCNAction.wait(duration: 2.5),
             SCNAction.run({node in
                 let playerNode = node as! SCNPlayer
-                playerNode.getLife().loseLife(amount: 1)
+                playerNode.getLife().loseLife(amount: damage)
             })
         ]))
     }

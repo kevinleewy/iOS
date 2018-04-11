@@ -82,7 +82,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             
             //2. Add the text field. You can configure it however you need.
             alert.addTextField { (textField) in
-                textField.text = "192.168.1.110"
+                //textField.text = "192.168.1.110"
+                textField.text = "192.168.17.221"
             }
             
             // 3. Grab the value from the text field, and print it when the user clicks OK.
@@ -154,6 +155,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBAction func connectAction(_ sender: Any) {
         if isWorldSetUp {
             debugprint("Leaving game")
+            self.socket.emit("leaveGame",[])
             restartSession()
             connectButton.setTitle("Join", for: .normal)
         } else {
@@ -162,16 +164,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
     }
     
-    @IBAction func summonAction(_ sender: Any) {
-        if isWorldSetUp {
-            restartSession()
-        } else {
-            //setUpWorld([])
-            
-        }
-        
-        //isWorldSetUp = !isWorldSetUp
-        //self.socket.emit("joinGame",[])
+    @IBAction func playAction(_ sender: Any) {
+        NSLog("Playing a card")
+        self.socket.emit("actionSelect", ["action":"play", "handCardSlot": 0])
     }
     
     @IBAction func drawAction(_ sender: Any) {
@@ -190,18 +185,33 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         //NSLog((self.sceneView.session.currentFrame?.camera.transform.columns.3.debugDescription)!)
         if turn {
             if self.player2!.getField().hasCreatures() {
-                self.player1!.getField().getLeftMostCreature()?.attack(target: self.player2!.getField().getLeftMostCreature()!)
+                //self.player1!.getField().getLeftMostCreature()?.attack(target: self.player2!.getField().getLeftMostCreature()!)
+                let params = [
+                    "action" : "attack",
+                    "attackerSlot" : self.player1!.getField().getLeftMostCreature()!.slot,
+                    "defenderSlot" : self.player2!.getField().getLeftMostCreature()!.slot
+                ] as [String : Any]
+                debugprint(params.description)
+                self.socket.emit("actionSelect", params)
             } else {
-                self.player1!.getField().getLeftMostCreature()?.attackPlayer(target: self.player2!)
+                //self.player1!.getField().getLeftMostCreature()?.attackPlayer(target: self.player2!, damage: 1)
+                let params = [
+                    "action" : "directAttack",
+                    "attackerSlot" : self.player1!.getField().getLeftMostCreature()!.slot
+                ] as [String : Any]
+                debugprint(params.description)
+                self.socket.emit("actionSelect", params)
             }
         } else {
             if self.player1!.getField().hasCreatures() {
-                self.player2!.getField().getLeftMostCreature()?.attack(target: self.player1!.getField().getLeftMostCreature()!)
+                self.player2!.getField().getLeftMostCreature()?.attack(
+                    target: self.player1!.getField().getLeftMostCreature()!,
+                    destroyed: 1
+                )
             } else {
-                self.player2!.getField().getLeftMostCreature()?.attackPlayer(target: self.player1!)
+                self.player2!.getField().getLeftMostCreature()?.attackPlayer(target: self.player1!, damage: 1)
             }
         }
-        self.socket.emit("actionSelect", ["action":"attack"])
     }
     /*
     func getHeadlines() {
@@ -255,9 +265,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self.socket.on("headlines_updated") {data, ack in
             self.getHeadlines();
         };*/
-        
+
         self.socket.on("joinedGame") {data, ack in
-            
+            self.debugprint(data.description);
             let dataJSON = data[0] as! [String : Any]
             
             //print error and exit if any
@@ -290,16 +300,53 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             }
             
             if let val = dataJSON["value"] as? [String : Any] {
-                let event = val["event"] as? String
-                let playerId = val["player"] as? String
-
-                if event == "draw" {
-                    let cardId = val["result"] as! Int
-                    if playerId == "Player1"{
-                        self.player1?.getHand().draw(cardId)
-                    } else {
-                        self.player2?.getHand().draw(cardId)
-                    }
+                let playerId = val["player"] as! String
+                let event = val["event"] as! String
+                let result = val["result"] as! [Int]
+                self.debugprint("Handling response [\(playerId),\(event),\(result.description)]")
+                switch event {
+                    case "draw" :
+                        let cardId = result[0]
+                        if playerId == "Player1" {
+                            self.player1?.getHand().draw(cardId)
+                        } else {
+                            self.player2?.getHand().draw(cardId)
+                        }
+                    case "play" :
+                        let cardId = result[0]
+                        let handSlot = result[1]
+                        let fieldSlot = result[2]
+                        if playerId == "Player1" {
+                            self.player1?.playCard(cardId: cardId, handSlot: handSlot, fieldSlot: fieldSlot)
+                        } else {
+                            self.player2?.playCard(cardId: cardId, handSlot: handSlot, fieldSlot: fieldSlot)
+                        }
+                    case "attack" :
+                        let attackerSlot = result[0]
+                        let defenderSlot = result[1]
+                        let destroyed    = result[2]
+                        
+                        if playerId == "Player1" {
+                            self.player1!.getField().getCreature(slot: attackerSlot)?.attack(
+                                target: self.player2!.getField().getCreature(slot: defenderSlot)!,
+                                destroyed: destroyed
+                            )
+                        } else {
+                            self.player2!.getField().getCreature(slot: attackerSlot)?.attack(
+                                target: self.player1!.getField().getCreature(slot: defenderSlot)!,
+                                destroyed: destroyed
+                            )
+                        }
+                    case "directAttack" :
+                            let attackerSlot = result[0]
+                            let damageDealt = result[1]
+                            if playerId == "Player1" {
+                                self.player1!.getField().getCreature(slot: attackerSlot)?.attackPlayer(target: self.player2!, damage: damageDealt)
+                            } else {
+                                self.player2!.getField().getCreature(slot: attackerSlot)?.attackPlayer(target: self.player1!, damage: damageDealt)
+                            }
+                    default :
+                        self.debugprint("Received \(event) event")
                 }
             }
         }
@@ -350,11 +397,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     func sessionWasInterrupted(_ session: ARSession) {
         // Inform the user that the session has been interrupted, for example, by presenting an overlay
+        NSLog("Session interrupted")
         
     }
     
     func sessionInterruptionEnded(_ session: ARSession) {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
-        
+        NSLog("Session interruption ended")
     }
 }
