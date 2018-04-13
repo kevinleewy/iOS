@@ -23,17 +23,20 @@ class SCNField: SCNNode {
         self.position = SCNVector3(x: 0.0, y: -2.0, z: -2.0)
         for (slot, creatureId) in config.enumerated() {
             var dae: String
+            var sound: String
             guard creatureId >= 0 else { continue }
             
             switch creatureId {
                 case 0:
                     dae = "art.scnassets/wolf/wolf.dae"
+                    sound = "audio/wolf_howl.wav"
                 default:
                     dae = "art.scnassets/ivysaur/ivysaur.dae"
+                    sound = "audio/ivysaur.mp3";
             }
 
-            let creature = SCNCreature(name: "Ally\(slot)", daeFilename: dae, scene: scene)
-            if !self.addCreature(creature: creature, slot: slot) {
+            let creature = SCNCreature(name: "Ally\(slot)", daeFilename: dae, soundFilename: sound, scene: scene)
+            if !self.addCreature(creature: creature, slot: slot, playSound: false) {
                 NSLog("Failed to add Ally\(slot)")
             }
         }
@@ -54,7 +57,7 @@ class SCNField: SCNNode {
     }
     
     //Adds creature to creature slot. Returns true if successful, false otherwise
-    public func addCreature(creature: SCNCreature, slot: Int) -> Bool {
+    public func addCreature(creature: SCNCreature, slot: Int, playSound: Bool) -> Bool {
         
         //return false if slot is out of range or another creature already present at slot
         guard slot >= 0 && slot < SCNField.MAX_CREATURES,
@@ -65,7 +68,7 @@ class SCNField: SCNNode {
         creature.position = SCNVector3(x: -4.0 + SCNField.CREATURE_CENTROID_GAP * Float(slot), y: 0.0, z: 0.0)
         self.addChildNode(creature)
         //add creature.appear()
-        creature.summon();
+        creature.summon(playSound: false);
         return true
     }
     

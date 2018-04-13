@@ -19,13 +19,15 @@ class SCNCreature: SCNNode {
     var scene: SCNScene
     var slot: Int = -1
     var attackParticles: SCNNode
+    var soundFilename: String
     
-    init(name: String, daeFilename: String, scene: SCNScene) {
+    init(name: String, daeFilename: String, soundFilename: String, scene: SCNScene) {
         
         self.scene = scene
         self.attackParticles = SCNNode()
         self.attackParticles.geometry = SCNBox(width: 0.3, height: 0.3, length: 0.3, chamferRadius: 0.3)
         self.attackParticles.geometry?.firstMaterial?.diffuse.contents = UIColor.green
+        self.soundFilename = soundFilename
         
         super.init()
         self.name = name
@@ -49,8 +51,16 @@ class SCNCreature: SCNNode {
         fatalError("NSCoding not supported")
     }
     
-    func summon(){
+    func summon(playSound: Bool){
         self.runAction(summonAction)
+        if playSound {
+            self.runAction(SCNAction.group([
+                summonAction,
+                SCNAction.playAudio(SCNAudioSource(fileNamed: self.soundFilename)!, waitForCompletion: false)
+            ]))
+        } else {
+            self.runAction(summonAction)
+        }
     }
     
     func attack(target: SCNCreature, destroyed: Int){

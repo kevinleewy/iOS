@@ -41,6 +41,8 @@ struct GameState:Decodable {
 
 class ViewController: UIViewController, ARSCNViewDelegate {
 
+    var spriteScene: OverlayScene!
+    
     @IBOutlet weak var connectButton: UIButton!
     @IBOutlet var sceneView: ARSCNView!
     let configuration = ARWorldTrackingConfiguration()
@@ -64,7 +66,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Show statistics such as fps and timing information
         self.sceneView.showsStatistics = true
-
+        
         // Establish connection with server
         connectToServer()
         
@@ -82,8 +84,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             
             //2. Add the text field. You can configure it however you need.
             alert.addTextField { (textField) in
-                //textField.text = "192.168.1.110"
-                textField.text = "192.168.17.221"
+                //textField.text = "192.168.1.110"  //home
+                textField.text = "192.168.17.221"   //work
+                //textField.text = "10.30.135.70" //stanford
             }
             
             // 3. Grab the value from the text field, and print it when the user clicks OK.
@@ -124,26 +127,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self.player2 = SCNPlayer(config: p2conf, scene: scene, depth: -8.0)    //8 meters deep
         self.player2?.eulerAngles = SCNVector3(0.degreesToRadians, 180.degreesToRadians, 0.degreesToRadians)
         scene.rootNode.addChildNode(self.player2!)
-        /*
-        var field: SCNField = self.player1!.getField()
-        for i in 0...4 {
-            let creature = SCNCreature(name: "Ally\(i)", daeFilename: "art.scnassets/ivysaur/ivysaur.dae", scene: scene)
-            if !field.addCreature(creature: creature, slot: i) {
-                NSLog("Failed to add Ally\(i)")
-            }
-        }
         
-        field = self.player2!.getField()
-        for i in 0...4 {
-            let creature = SCNCreature(name: "Enemy\(i)", daeFilename: "art.scnassets/ivysaur/ivysaur.dae", scene: scene)
-            if !field.addCreature(creature: creature, slot: i) {
-                NSLog("Failed to add Enemy\(i)")
-            }
-        }
-         */
+        // Load Overlay Scene
+        self.spriteScene = OverlayScene(size: self.view.bounds.size)
+        self.sceneView.overlaySKScene = self.spriteScene
+
     }
     
     func restartSession() {
+        self.sceneView.overlaySKScene = nil
         self.sceneView.session.pause()
         self.sceneView.scene.rootNode.enumerateChildNodes { (node, _) in
             node.removeFromParentNode()
