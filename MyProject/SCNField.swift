@@ -22,20 +22,18 @@ class SCNField: SCNNode {
         super.init()
         self.position = SCNVector3(x: 0.0, y: -2.0, z: -2.0)
         for (slot, creatureId) in config.enumerated() {
-            var dae: String
-            var sound: String
+            var id: String
+
             guard creatureId >= 0 else { continue }
             
             switch creatureId {
                 case 0:
-                    dae = "art.scnassets/wolf/wolf.dae"
-                    sound = "audio/wolf_howl.wav"
+                    id = "wolf"
                 default:
-                    dae = "art.scnassets/ivysaur/ivysaur.dae"
-                    sound = "audio/ivysaur.mp3";
+                    id = "ivysaur"
             }
 
-            let creature = SCNCreature(name: "Ally\(slot)", daeFilename: dae, soundFilename: sound, scene: scene)
+            let creature = SCNCreature(name: "Ally\(slot)", id: id, scene: scene)
             if !self.addCreature(creature: creature, slot: slot, playSound: false) {
                 NSLog("Failed to add Ally\(slot)")
             }

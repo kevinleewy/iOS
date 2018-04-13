@@ -21,13 +21,17 @@ class SCNCreature: SCNNode {
     var attackParticles: SCNNode
     var soundFilename: String
     
-    init(name: String, daeFilename: String, soundFilename: String, scene: SCNScene) {
+    init(name: String, id: String, scene: SCNScene) {
+        
+        //Load data from JSON
+        let jsonResult = JSONData(filename: "json/\(id)").getData()
+        let daeFilename = jsonResult?["scene"] as! String
         
         self.scene = scene
         self.attackParticles = SCNNode()
         self.attackParticles.geometry = SCNBox(width: 0.3, height: 0.3, length: 0.3, chamferRadius: 0.3)
         self.attackParticles.geometry?.firstMaterial?.diffuse.contents = UIColor.green
-        self.soundFilename = soundFilename
+        self.soundFilename = jsonResult?["sound_file"] as! String
         
         super.init()
         self.name = name

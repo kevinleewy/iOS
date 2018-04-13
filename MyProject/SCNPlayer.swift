@@ -50,19 +50,17 @@ class SCNPlayer: SCNNode {
     
     public func playCard(cardId:Int, handSlot:Int, fieldSlot:Int){
         
-        var dae: String
-        var sound: String
+        var id: String
         
         switch cardId {
-        case 0:
-            dae = "art.scnassets/wolf/wolf.dae"
-            sound = "audio/wolf_howl.wav"
-        default:
-            dae = "art.scnassets/ivysaur/ivysaur.dae"
-            sound = "audio/ivysaur.mp3";
+            case 0:
+                id = "wolf"
+            default:
+                id = "ivysaur"
         }
+
         hand.discard(handSlot)
-        let creature = SCNCreature(name: "Ally\(fieldSlot)", daeFilename: dae, soundFilename: sound, scene: scene)
+        let creature = SCNCreature(name: "Ally\(fieldSlot)", id: id, scene: scene)
         if !field.addCreature(creature: creature, slot: fieldSlot, playSound: true) {
             NSLog("Failed to add Ally\(fieldSlot)")
         }

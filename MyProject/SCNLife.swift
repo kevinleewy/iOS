@@ -30,10 +30,9 @@ class SCNLife: SCNNode {
             icon.geometry = SCNBox(width: 0.2, height: 0.2, length: 0.2, chamferRadius: 0.2)
             icon.geometry?.firstMaterial?.diffuse.contents = UIColor.magenta
             icon.position = SCNVector3(x: pos, y: 0.0, z: 0.0)
+            icon.opacity = 0.0
             if i < self.life {
-                icon.opacity = 1.0
-            } else {
-                icon.opacity = 0.0
+                icon.runAction(SCNAction.fadeIn(duration: 1.0))
             }
             icons.append(icon)
             pos += SCNLife.ICON_GAP
