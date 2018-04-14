@@ -85,4 +85,8 @@ class SCNHand: SCNNode {
         }
     }
     
+    public func isEmpty() -> Bool {
+        return hand.count == 0
+    }
+    
 }

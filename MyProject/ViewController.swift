@@ -44,10 +44,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var spriteScene: OverlayScene!
     
     @IBOutlet weak var connectButton: UIButton!
+    
+    
+    @IBOutlet weak var playButton: UIButton!
+    
+    @IBOutlet weak var drawButton: UIButton!
+    
+    @IBOutlet weak var attackButton: UIButton!
+    
+    @IBOutlet weak var nextButton: UIButton!
+    
     @IBOutlet var sceneView: ARSCNView!
     let configuration = ARWorldTrackingConfiguration()
     var isWorldSetUp = false
     var turn = true;
+    
+    var playerId: String?
     
     var player1: SCNPlayer?
     var player2: SCNPlayer?
@@ -73,7 +85,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func debugprint(_ s:String){
-        print(s)
+        print("DEBUG: \(s)")
     }
     
     func connectToServer() {
@@ -84,15 +96,24 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             
             //2. Add the text field. You can configure it however you need.
             alert.addTextField { (textField) in
-                //textField.text = "192.168.1.110"  //home
-                textField.text = "192.168.17.221"   //work
+                textField.text = "192.168.1.110"  //home
+                //textField.text = "192.168.17.221"   //work
                 //textField.text = "10.30.135.70" //stanford
             }
             
             // 3. Grab the value from the text field, and print it when the user clicks OK.
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
+            alert.addAction(UIAlertAction(title: "Player 1", style: .default, handler: { [weak alert] (_) in
                 let textField = alert?.textFields![0] // Force unwrapping because we know it exists.
                 self.host = (textField?.text)!
+                self.playerId = "Player1"
+                self.initSocket()   //initialize sockets
+            }))
+            
+            // 3. Grab the value from the text field, and print it when the user clicks OK.
+            alert.addAction(UIAlertAction(title: "Player 2", style: .default, handler: { [weak alert] (_) in
+                let textField = alert?.textFields![0] // Force unwrapping because we know it exists.
+                self.host = (textField?.text)!
+                self.playerId = "Player2"
                 self.initSocket()   //initialize sockets
             }))
             
@@ -102,7 +123,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func initSocket(){
-        self.manager = SocketManager(socketURL: URL(string: "http://\(self.host):8080")!,config: [.log(false),.connectParams(["token": "Player1"])])
+        self.manager = SocketManager(socketURL: URL(string: "http://\(self.host):8080")!,config: [.log(false),.connectParams(["token": playerId!])])
         self.socket = manager?.defaultSocket
         self.setSocketEvents()
         self.socket.connect()
@@ -114,6 +135,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         debugprint(config.description)
         let p1conf = config["player1"] as! [String: Any]
         let p2conf = config["player2"] as! [String: Any]
+        let turnPlayer = config["turnPlayer"] as! String
+        
         
         // Create a new scene
         let scene = SCNScene()
@@ -131,7 +154,34 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Load Overlay Scene
         self.spriteScene = OverlayScene(size: self.view.bounds.size)
         self.sceneView.overlaySKScene = self.spriteScene
+        
+        //Configure buttons
+        self.configureButtons(turnPlayer == self.playerId)
 
+    }
+    
+    func configureButtons(_ enable: Bool){
+        if enable {
+            self.playButton.isHidden   = false
+            self.drawButton.isHidden   = false
+            self.attackButton.isHidden = false
+            self.nextButton.isHidden   = false
+            if self.player1!.getHand().isEmpty() {
+                self.playButton.isEnabled = false
+            } else {
+                self.playButton.isEnabled = true
+            }
+            if self.player1!.getField().hasCreatures() {
+                self.attackButton.isEnabled = true
+            } else {
+                self.attackButton.isEnabled = false
+            }
+        } else {
+            self.playButton.isHidden   = true
+            self.drawButton.isHidden   = true
+            self.attackButton.isHidden = true
+            self.nextButton.isHidden   = true
+        }
     }
     
     func restartSession() {
@@ -205,6 +255,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             }
         }
     }
+    
+    @IBAction func nextAction(_ sender: Any) {
+        NSLog("Requesting phase change")
+        self.socket.emit("actionSelect", ["action":"nextPhase"])
+    }
+    
+    
     /*
     func getHeadlines() {
         
@@ -233,6 +290,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             }
         }.resume();
     };*/
+    
+    // MARK: Socket Events
     
     private func setSocketEvents() {
         self.socket.on(clientEvent: .connect) {data, ack in
@@ -299,8 +358,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 switch event {
                     case "draw" :
                         let cardId = result[0]
-                        if playerId == "Player1" {
+                        if playerId == self.playerId {
                             self.player1?.getHand().draw(cardId)
+                            self.configureButtons(true)
                         } else {
                             self.player2?.getHand().draw(cardId)
                         }
@@ -308,8 +368,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                         let cardId = result[0]
                         let handSlot = result[1]
                         let fieldSlot = result[2]
-                        if playerId == "Player1" {
+                        if playerId == self.playerId {
                             self.player1?.playCard(cardId: cardId, handSlot: handSlot, fieldSlot: fieldSlot)
+                            self.configureButtons(true)
                         } else {
                             self.player2?.playCard(cardId: cardId, handSlot: handSlot, fieldSlot: fieldSlot)
                         }
@@ -318,7 +379,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                         let defenderSlot = result[1]
                         let destroyed    = result[2]
                         
-                        if playerId == "Player1" {
+                        if playerId == self.playerId {
                             self.player1!.getField().getCreature(slot: attackerSlot)?.attack(
                                 target: self.player2!.getField().getCreature(slot: defenderSlot)!,
                                 destroyed: destroyed
@@ -332,11 +393,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                     case "directAttack" :
                             let attackerSlot = result[0]
                             let damageDealt = result[1]
-                            if playerId == "Player1" {
+                            if playerId == self.playerId {
                                 self.player1!.getField().getCreature(slot: attackerSlot)?.attackPlayer(target: self.player2!, damage: damageDealt)
                             } else {
                                 self.player2!.getField().getCreature(slot: attackerSlot)?.attackPlayer(target: self.player1!, damage: damageDealt)
                             }
+                    case "endTurn" :
+                        self.configureButtons(!(playerId == self.playerId))
                     default :
                         self.debugprint("Received \(event) event")
                 }
