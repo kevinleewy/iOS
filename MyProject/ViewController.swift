@@ -68,7 +68,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var socket: SocketIOClient!
     var host: String = ""
     
-    var DEBUG = true
+    var DEBUG = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,7 +85,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     func debugprint(_ s:String){
-        print("DEBUG: \(s)")
+        if self.DEBUG {
+            print("DEBUG: \(s)")
+        }
     }
     
     func connectToServer() {
@@ -96,9 +98,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             
             //2. Add the text field. You can configure it however you need.
             alert.addTextField { (textField) in
-                textField.text = "192.168.1.110"  //home
-                //textField.text = "192.168.17.221"   //work
-                //textField.text = "10.30.135.70" //stanford
+                //textField.text = "192.168.1.110"  //home
+                textField.text = "192.168.17.221"   //work
+                //textField.text = "10.30.151.51" //stanford
             }
             
             // 3. Grab the value from the text field, and print it when the user clicks OK.
@@ -109,13 +111,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 self.initSocket()   //initialize sockets
             }))
             
-            // 3. Grab the value from the text field, and print it when the user clicks OK.
             alert.addAction(UIAlertAction(title: "Player 2", style: .default, handler: { [weak alert] (_) in
                 let textField = alert?.textFields![0] // Force unwrapping because we know it exists.
                 self.host = (textField?.text)!
                 self.playerId = "Player2"
                 self.initSocket()   //initialize sockets
             }))
+            
+            // TODO: Spectator option
+            /*
+            alert.addAction(UIAlertAction(title: "Spectator", style: .default, handler: { [weak alert] (_) in
+                let textField = alert?.textFields![0] // Force unwrapping because we know it exists.
+                self.host = (textField?.text)!
+                self.playerId = "Spectator"
+                self.initSocket()   //initialize sockets
+            }))
+             */
             
             // 4. Present the alert.
             UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
@@ -144,16 +155,24 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Set the scene to the view
         sceneView.scene = scene
         
+        // Load Overlay Scene
+        self.spriteScene = OverlayScene(size: self.view.bounds.size)
+        self.sceneView.overlaySKScene = self.spriteScene
+        
         self.player1 = SCNPlayer(config: p1conf, scene: scene, depth: 0.0)
         scene.rootNode.addChildNode(self.player1!)
+        let p1Stats = self.player1?.getStats()
+        p1Stats?.position = CGPoint(x: self.spriteScene.size.width - 80, y: 200)
+        self.spriteScene.addChild(p1Stats!)
         
         self.player2 = SCNPlayer(config: p2conf, scene: scene, depth: -8.0)    //8 meters deep
         self.player2?.eulerAngles = SCNVector3(0.degreesToRadians, 180.degreesToRadians, 0.degreesToRadians)
         scene.rootNode.addChildNode(self.player2!)
+        let p2Stats = self.player2?.getStats()
+        p2Stats?.position = CGPoint(x: 80, y: self.spriteScene.size.height - 80)
+        self.spriteScene.addChild(p2Stats!)
         
-        // Load Overlay Scene
-        self.spriteScene = OverlayScene(size: self.view.bounds.size)
-        self.sceneView.overlaySKScene = self.spriteScene
+        
         
         //Configure buttons
         self.configureButtons(turnPlayer == self.playerId)
@@ -355,25 +374,49 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 let event = val["event"] as! String
                 let result = val["result"] as! [Int]
                 self.debugprint("Handling response [\(playerId),\(event),\(result.description)]")
+                self.spriteScene.announcement = "\(playerId) \(event)"
                 switch event {
                     case "draw" :
                         let cardId = result[0]
                         if playerId == self.playerId {
-                            self.player1?.getHand().draw(cardId)
+                            self.player1?.draw(cardId)
                             self.configureButtons(true)
                         } else {
-                            self.player2?.getHand().draw(cardId)
+                            self.player2?.draw(cardId)
                         }
                     case "play" :
-                        let cardId = result[0]
-                        let handSlot = result[1]
-                        let fieldSlot = result[2]
+                        let handSlot = result[0]
+                        let opCode = result[1]
+                        
+                        //Remove card from hand
                         if playerId == self.playerId {
-                            self.player1?.playCard(cardId: cardId, handSlot: handSlot, fieldSlot: fieldSlot)
-                            self.configureButtons(true)
+                            self.player1?.playCard(handSlot: handSlot)
                         } else {
-                            self.player2?.playCard(cardId: cardId, handSlot: handSlot, fieldSlot: fieldSlot)
+                            self.player2?.playCard(handSlot: handSlot)
                         }
+                        
+                        //Resolve effect
+                        if opCode == 0 {    //summon
+                            let fieldSlot = result[2]
+                            let cardId = result[3]
+                            if playerId == self.playerId {
+                                self.player1?.summonCreature(cardId: cardId,fieldSlot: fieldSlot)
+                            } else {
+                                self.player2?.summonCreature(cardId: cardId,fieldSlot: fieldSlot)
+                            }
+                        } else if opCode == 1 {//gain life
+                            let affectedPlayer     = result[2]
+                            let amountOfLifeGained = result[3]
+                            if (playerId == self.playerId && affectedPlayer == 0) ||
+                                (playerId != self.playerId && affectedPlayer == 1) {
+                                print("This player gained one life")
+                                self.player1?.gainLife(amount: amountOfLifeGained)
+                            } else {
+                                print("Other player gained one life")
+                                self.player2?.gainLife(amount: amountOfLifeGained)
+                            }
+                        }
+                        self.configureButtons(playerId == self.playerId)
                     case "attack" :
                         let attackerSlot = result[0]
                         let defenderSlot = result[1]

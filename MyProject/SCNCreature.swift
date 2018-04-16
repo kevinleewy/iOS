@@ -16,37 +16,56 @@ class SCNCreature: SCNNode {
     let myOri: SCNVector3 = SCNVector3(0.degreesToRadians, 0.degreesToRadians, 0.degreesToRadians)
     let opponentOri: SCNVector3 = SCNVector3(0.degreesToRadians, 180.degreesToRadians, 0.degreesToRadians)
     
-    var scene: SCNScene
+    var scene: SCNScene     //main scene
+    var creatureScene: SCNScene //creature scene
     var slot: Int = -1
     var attackParticles: SCNNode
+    var daeFilename: String
     var soundFilename: String
+    var originalScale: Float
+    //var animationKey: String
     
     init(name: String, id: String, scene: SCNScene) {
         
         //Load data from JSON
         let jsonResult = JSONData(filename: "json/\(id)").getData()
-        let daeFilename = jsonResult?["scene"] as! String
+        self.daeFilename = jsonResult?["scene"] as! String
         
         self.scene = scene
+        self.creatureScene = SCNScene(named: daeFilename)!
         self.attackParticles = SCNNode()
         self.attackParticles.geometry = SCNBox(width: 0.3, height: 0.3, length: 0.3, chamferRadius: 0.3)
         self.attackParticles.geometry?.firstMaterial?.diffuse.contents = UIColor.green
         self.soundFilename = jsonResult?["sound_file"] as! String
+        //self.animationKey = jsonResult?["animation"] as! String
+        let oriScale = jsonResult?["scale"] as! NSNumber
+        self.originalScale = oriScale.floatValue
         
         super.init()
         self.name = name
         
-        //daeFilename = "art.scnassets/ivysaur/ivysaur.dae"
-        guard let scene = SCNScene(named: daeFilename) else {
-            NSLog("Unable to load creature")
-            return
+        NSLog("Master Keys:\(self.creatureScene.rootNode.animationKeys.description)")
+        for key in self.creatureScene.rootNode.animationKeys {
+            NSLog("Key: \(key)")
+            let player = self.creatureScene.rootNode.animationPlayer(forKey: key)
+            player?.play()
+            NSLog((player?.description)!)
         }
-    
-        for childNode in scene.rootNode.childNodes {
+
+        for childNode in self.creatureScene.rootNode.childNodes {
+            //NSLog("Init:Animation Keys:\(childNode.animationKeys.description)")
+            for key in childNode.animationKeys {
+                NSLog("Key: \(key)")
+                let player = childNode.animationPlayer(forKey: key)
+                childNode.addAnimationPlayer(player!, forKey: key)
+                player?.play()
+                NSLog((player?.description)!)
+            }
             self.addChildNode(childNode as SCNNode)
+            
         }
         
-        self.scale = SCNVector3(x: 0.5, y: 0.5, z: 0.5)
+        self.scale = SCNVector3(x: self.originalScale, y: self.originalScale, z: self.originalScale)
         self.opacity = 0.0
         
     }
@@ -56,7 +75,7 @@ class SCNCreature: SCNNode {
     }
     
     func summon(playSound: Bool){
-        self.runAction(summonAction)
+        //self.runAction(summonAction)
         if playSound {
             self.runAction(SCNAction.group([
                 summonAction,
@@ -64,6 +83,24 @@ class SCNCreature: SCNNode {
             ]))
         } else {
             self.runAction(summonAction)
+        }
+
+        //let anim = SCNAnimation(contentsOf: URL(fileURLWithPath: self.daeFilename))
+        //self.addAnimation(anim, forKey: "unnamed animation #0")
+        
+        NSLog("Master Animation Keys:\(self.animationKeys.description)")
+        NSLog("Root Animation Keys:\(self.creatureScene.rootNode.animationKeys.description)")
+        for child in self.creatureScene.rootNode.childNodes {
+            NSLog("Summon: Animation Keys:\(child.animationKeys.description)")
+            
+            for key in child.animationKeys {
+                NSLog("Summon: Key:\(key)")
+                /*let animation = child.animation(forKey: key)!
+                animation.repeatCount = 5
+                child.removeAnimation(forKey: key)
+                child.addAnimation(animation, forKey: key)
+ */
+            }
         }
     }
     
@@ -121,7 +158,7 @@ class SCNCreature: SCNNode {
             SCNAction.wait(duration: 2.5),
             SCNAction.run({node in
                 let playerNode = node as! SCNPlayer
-                playerNode.getLife().loseLife(amount: damage)
+                playerNode.loseLife(amount: damage)
             })
         ]))
     }

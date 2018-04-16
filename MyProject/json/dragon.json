@@ -1,8 +1,8 @@
 {
     "name" : "Dragon",
-    "scene" : "",
+    "scene" : "art.scnassets/black_dragon/Dragon 2.5_dae.dae",
     "card_image" : "card_creature_dragon",
     "large_card_image" : "card_creature_dragon_large",
     "sound_file" : "audio/sdragon-roar.wav",
-    "scale" : 1.0
+    "scale" : 0.05
 }

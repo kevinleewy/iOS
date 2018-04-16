@@ -4,5 +4,6 @@
     "card_image" : "card_creature_ivysaur",
     "large_card_image" : "card_creature_ivysaur_large",
     "sound_file" : "audio/ivysaur.mp3",
-    "scale" : 0.5
+    "scale" : 0.5,
+    "animation" : "Geometry-Ivysaur_3_low_scale037.X"
 }

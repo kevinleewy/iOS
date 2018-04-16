@@ -21,6 +21,7 @@
 		3D155D9820706A4A0097B508 /* Anchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D155D9720706A4A0097B508 /* Anchor.swift */; };
 		3D379E31207C60F5007AF687 /* SCNLife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D379E30207C60F5007AF687 /* SCNLife.swift */; };
 		3D379E33207C7A59007AF687 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 3D379E32207C7A59007AF687 /* Podfile */; };
+		3D8D2CAA2085471F008C77CD /* SKPlayerStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D2CA92085471F008C77CD /* SKPlayerStats.swift */; };
 		3DA937172071BD3A0065E7E5 /* JSONData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA937162071BD3A0065E7E5 /* JSONData.swift */; };
 		3DA937222072F3200065E7E5 /* SCNField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA937212072F3200065E7E5 /* SCNField.swift */; };
 		3DA93724207300B90065E7E5 /* SCNPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA93723207300B90065E7E5 /* SCNPlayer.swift */; };
@@ -76,6 +77,7 @@
 		3D155D9720706A4A0097B508 /* Anchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchor.swift; sourceTree = "<group>"; };
 		3D379E30207C60F5007AF687 /* SCNLife.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCNLife.swift; sourceTree = "<group>"; };
 		3D379E32207C7A59007AF687 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		3D8D2CA92085471F008C77CD /* SKPlayerStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKPlayerStats.swift; sourceTree = "<group>"; };
 		3DA937162071BD3A0065E7E5 /* JSONData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONData.swift; sourceTree = "<group>"; };
 		3DA937212072F3200065E7E5 /* SCNField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNField.swift; sourceTree = "<group>"; };
 		3DA93723207300B90065E7E5 /* SCNPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNPlayer.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 			children = (
 				3D155D25206F225E0097B508 /* AppDelegate.swift */,
 				3D155D9720706A4A0097B508 /* Anchor.swift */,
+				3D8D2CA92085471F008C77CD /* SKPlayerStats.swift */,
 				3DB536BE2081636B0062324A /* OverlayScene.swift */,
 				3D155D55206F2FF90097B508 /* GameScene.swift */,
 				3D155D29206F225E0097B508 /* ViewController.swift */,
@@ -437,6 +440,7 @@
 				3D155D94206FFF5A0097B508 /* SCNCreature.swift in Sources */,
 				3DA937222072F3200065E7E5 /* SCNField.swift in Sources */,
 				3D155D56206F2FF90097B508 /* GameScene.swift in Sources */,
+				3D8D2CAA2085471F008C77CD /* SKPlayerStats.swift in Sources */,
 				3DB536BF2081636B0062324A /* OverlayScene.swift in Sources */,
 				3D379E31207C60F5007AF687 /* SCNLife.swift in Sources */,
 				3DA9372620731FF60065E7E5 /* SCNHand.swift in Sources */,

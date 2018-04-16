@@ -54,8 +54,8 @@ class SCNLife: SCNNode {
     
     public func gainLife(amount: Int) {
         self.life = min(SCNLife.INITIAL_LIFE, self.life+amount)
-        for i in stride(from: self.life, to: SCNLife.INITIAL_LIFE, by: 1) {
-            self.icons[i].runAction(SCNAction.fadeOut(duration: 1.0))
+        for i in stride(from: 0, to: self.life, by: 1) {
+            self.icons[i].runAction(SCNAction.fadeIn(duration: 1.0))
         }
     }
     

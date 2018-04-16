@@ -29,6 +29,8 @@ class SCNField: SCNNode {
             switch creatureId {
                 case 0:
                     id = "wolf"
+                case 2:
+                    id = "dragon"
                 default:
                     id = "ivysaur"
             }
