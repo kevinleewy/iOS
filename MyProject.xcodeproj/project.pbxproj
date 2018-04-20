@@ -21,6 +21,7 @@
 		3D155D9820706A4A0097B508 /* Anchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D155D9720706A4A0097B508 /* Anchor.swift */; };
 		3D379E31207C60F5007AF687 /* SCNLife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D379E30207C60F5007AF687 /* SCNLife.swift */; };
 		3D379E33207C7A59007AF687 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 3D379E32207C7A59007AF687 /* Podfile */; };
+		3D556182208A825400B67467 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D556181208A825400B67467 /* MenuViewController.swift */; };
 		3D8D2CAA2085471F008C77CD /* SKPlayerStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D2CA92085471F008C77CD /* SKPlayerStats.swift */; };
 		3DA937172071BD3A0065E7E5 /* JSONData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA937162071BD3A0065E7E5 /* JSONData.swift */; };
 		3DA937222072F3200065E7E5 /* SCNField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA937212072F3200065E7E5 /* SCNField.swift */; };
@@ -31,6 +32,7 @@
 		3DB536BF2081636B0062324A /* OverlayScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DB536BE2081636B0062324A /* OverlayScene.swift */; };
 		3DB536C120816C5C0062324A /* json in Resources */ = {isa = PBXBuildFile; fileRef = 3DB536C020816C5C0062324A /* json */; };
 		3DB536F02081854F0062324A /* sample_ui_set in Resources */ = {isa = PBXBuildFile; fileRef = 3DB536EF2081854F0062324A /* sample_ui_set */; };
+		3DED7DC92086FA9900B27625 /* TrayLauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DED7DC82086FA9900B27625 /* TrayLauncher.swift */; };
 		4A4C363F93CFC2650CE658C4 /* Pods_MyProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB851A9A2A234FC007A5DCD9 /* Pods_MyProject.framework */; };
 		4CE1F74F4DD3C1ED99332185 /* Pods_MyProjectTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2E8B208A2E978A9FD7F77D8 /* Pods_MyProjectTests.framework */; };
 		F91DCD1F893E32D8866B0D43 /* Pods_MyProjectUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86E4B30F725CB7066AE1CFD2 /* Pods_MyProjectUITests.framework */; };
@@ -77,6 +79,7 @@
 		3D155D9720706A4A0097B508 /* Anchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchor.swift; sourceTree = "<group>"; };
 		3D379E30207C60F5007AF687 /* SCNLife.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCNLife.swift; sourceTree = "<group>"; };
 		3D379E32207C7A59007AF687 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		3D556181208A825400B67467 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		3D8D2CA92085471F008C77CD /* SKPlayerStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKPlayerStats.swift; sourceTree = "<group>"; };
 		3DA937162071BD3A0065E7E5 /* JSONData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONData.swift; sourceTree = "<group>"; };
 		3DA937212072F3200065E7E5 /* SCNField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNField.swift; sourceTree = "<group>"; };
@@ -87,6 +90,7 @@
 		3DB536BE2081636B0062324A /* OverlayScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayScene.swift; sourceTree = "<group>"; };
 		3DB536C020816C5C0062324A /* json */ = {isa = PBXFileReference; lastKnownFileType = folder; path = json; sourceTree = "<group>"; };
 		3DB536EF2081854F0062324A /* sample_ui_set */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sample_ui_set; sourceTree = "<group>"; };
+		3DED7DC82086FA9900B27625 /* TrayLauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrayLauncher.swift; sourceTree = "<group>"; };
 		573D9EB3CDB6500B3BE557FA /* Pods-MyProjectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyProjectTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyProjectTests/Pods-MyProjectTests.release.xcconfig"; sourceTree = "<group>"; };
 		667B0A0A012F97B2A2C63CFC /* Pods-MyProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyProject.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyProject/Pods-MyProject.debug.xcconfig"; sourceTree = "<group>"; };
 		86E4B30F725CB7066AE1CFD2 /* Pods_MyProjectUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyProjectUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -149,6 +153,7 @@
 		3D155D24206F225E0097B508 /* MyProject */ = {
 			isa = PBXGroup;
 			children = (
+				3D556183208A826900B67467 /* Controllers */,
 				3D155D25206F225E0097B508 /* AppDelegate.swift */,
 				3D155D9720706A4A0097B508 /* Anchor.swift */,
 				3D8D2CA92085471F008C77CD /* SKPlayerStats.swift */,
@@ -162,6 +167,7 @@
 				3D379E30207C60F5007AF687 /* SCNLife.swift */,
 				3DA93723207300B90065E7E5 /* SCNPlayer.swift */,
 				3DA9372520731FF60065E7E5 /* SCNHand.swift */,
+				3DED7DC82086FA9900B27625 /* TrayLauncher.swift */,
 				3DA93727207326AF0065E7E5 /* Util.swift */,
 				3D155D2B206F225E0097B508 /* Main.storyboard */,
 				3DA93729207337B10065E7E5 /* audio */,
@@ -191,6 +197,14 @@
 				3D155D49206F225F0097B508 /* Info.plist */,
 			);
 			path = MyProjectUITests;
+			sourceTree = "<group>";
+		};
+		3D556183208A826900B67467 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				3D556181208A825400B67467 /* MenuViewController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		45D205412ACBB8B620037D79 /* Frameworks */ = {
@@ -443,8 +457,10 @@
 				3D8D2CAA2085471F008C77CD /* SKPlayerStats.swift in Sources */,
 				3DB536BF2081636B0062324A /* OverlayScene.swift in Sources */,
 				3D379E31207C60F5007AF687 /* SCNLife.swift in Sources */,
+				3D556182208A825400B67467 /* MenuViewController.swift in Sources */,
 				3DA9372620731FF60065E7E5 /* SCNHand.swift in Sources */,
 				3DA93724207300B90065E7E5 /* SCNPlayer.swift in Sources */,
+				3DED7DC92086FA9900B27625 /* TrayLauncher.swift in Sources */,
 				3D155D9620705E7B0097B508 /* SCNCard.swift in Sources */,
 				3D155D2A206F225E0097B508 /* ViewController.swift in Sources */,
 				3DA937172071BD3A0065E7E5 /* JSONData.swift in Sources */,

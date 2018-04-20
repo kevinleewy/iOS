@@ -18,7 +18,6 @@ class SCNLife: SCNNode {
     static let ICON_GAP: Float = 0.6 //40cm
     
     init(config: Int, scene: SCNScene) {
-        NSLog("Building life with \(config)")
         self.scene = scene
         self.life = config
         

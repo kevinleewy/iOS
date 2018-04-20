@@ -16,12 +16,12 @@ class SCNPlayer: SCNNode {
     private var sceneLife : SCNLife
     private var life: Int {
         didSet {
-            self.playerStatsNode.lifeNode.text = "Life: \(self.life)"
+            self.playerStatsNode.lifeNode.text = "\(self.life)"
         }
     }
     private var deckSize: Int {
         didSet {
-            self.playerStatsNode.deckNode.text = "Deck: \(self.deckSize)"
+            self.playerStatsNode.deckNode.text = "\(self.deckSize)"
         }
     }
     private var playerStatsNode: SKPlayerStats

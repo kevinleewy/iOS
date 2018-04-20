@@ -1,6 +1,10 @@
 {
     "name" : "Dragon",
-    "scene" : "art.scnassets/black_dragon/Dragon 2.5_dae.dae",
+    "scene" : "art.scnassets/black_dragon/Dragon_animation_idle.dae",
+    "idle"  : "art.scnassets/black_dragon/Dragon_animation_idle.dae",
+    "walk"  : "art.scnassets/black_dragon/Dragon_animation_walk.dae",
+    "run"   : "art.scnassets/black_dragon/Dragon_animation_run.dae",
+    "fly"   : "art.scnassets/black_dragon/Dragon_animation_fly.dae",
     "card_image" : "card_creature_dragon",
     "large_card_image" : "card_creature_dragon_large",
     "sound_file" : "audio/sdragon-roar.wav",

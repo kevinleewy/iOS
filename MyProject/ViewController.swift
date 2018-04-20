@@ -10,7 +10,7 @@ import ARKit
 import SocketIO
 
 // Struct for parsed JSON data ------------------------------------
-
+/*
 struct NewsAPIStruct:Decodable {
     let headlines:[Headlines];
 }
@@ -38,7 +38,7 @@ struct GameState:Decodable {
         headline = json ["headline"] as? String ?? "";
     };
 };
-
+*/
 class ViewController: UIViewController, ARSCNViewDelegate {
 
     var spriteScene: OverlayScene!
@@ -56,6 +56,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     @IBOutlet var sceneView: ARSCNView!
     let configuration = ARWorldTrackingConfiguration()
+    let trayLauncher = TrayLauncher()
     var isWorldSetUp = false
     var turn = true;
     
@@ -77,7 +78,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self.sceneView.delegate = self
         
         // Show statistics such as fps and timing information
-        self.sceneView.showsStatistics = true
+        //self.sceneView.showsStatistics = true
+        
+        // Set up spotlight attached to camera
+        attachSpotLight()
         
         // Establish connection with server
         connectToServer()
@@ -88,6 +92,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         if self.DEBUG {
             print("DEBUG: \(s)")
         }
+    }
+    
+    func attachSpotLight(){
+        let spotLight = SCNLight()
+        spotLight.type = .spot
+        spotLight.spotInnerAngle = 60
+        spotLight.spotOuterAngle = 60
+        let spotNode = SCNNode()
+        spotNode.light = spotLight
+        self.sceneView.pointOfView?.addChildNode(spotNode)
     }
     
     func connectToServer() {
@@ -169,7 +183,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self.player2?.eulerAngles = SCNVector3(0.degreesToRadians, 180.degreesToRadians, 0.degreesToRadians)
         scene.rootNode.addChildNode(self.player2!)
         let p2Stats = self.player2?.getStats()
-        p2Stats?.position = CGPoint(x: 80, y: self.spriteScene.size.height - 80)
+        p2Stats?.position = CGPoint(x: 40, y: self.spriteScene.size.height - 80)
         self.spriteScene.addChild(p2Stats!)
         
         
@@ -179,6 +193,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     }
     
+    /* @param - enable: Bool
+     * true : make all buttons visible, but disable invalid buttons
+     * false: hide all buttons
+     */
     func configureButtons(_ enable: Bool){
         if enable {
             self.playButton.isHidden   = false
@@ -214,6 +232,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     @IBAction func connectAction(_ sender: Any) {
+
         if isWorldSetUp {
             debugprint("Leaving game")
             self.socket.emit("leaveGame",[])
@@ -225,13 +244,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
     }
     
+    
+    @IBAction func toggleTray(_ sender: Any) {
+        trayLauncher.toggleTray()
+    }
+    
     @IBAction func playAction(_ sender: Any) {
-        NSLog("Playing a card")
+        debugprint("Playing a card")
         self.socket.emit("actionSelect", ["action":"play", "handCardSlot": 0])
     }
     
     @IBAction func drawAction(_ sender: Any) {
-        NSLog("Drawing a card")
+        debugprint("Drawing a card")
         /*if turn {
             self.player1!.getHand().draw(Int(arc4random_uniform(3)))
         } else {
@@ -243,35 +267,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     @IBAction func AttackAction(_ sender: Any) {
-        //NSLog((self.sceneView.session.currentFrame?.camera.transform.columns.3.debugDescription)!)
-        if turn {
-            if self.player2!.getField().hasCreatures() {
-                //self.player1!.getField().getLeftMostCreature()?.attack(target: self.player2!.getField().getLeftMostCreature()!)
-                let params = [
-                    "action" : "attack",
-                    "attackerSlot" : self.player1!.getField().getLeftMostCreature()!.slot,
-                    "defenderSlot" : self.player2!.getField().getLeftMostCreature()!.slot
-                ] as [String : Any]
-                debugprint(params.description)
-                self.socket.emit("actionSelect", params)
-            } else {
-                //self.player1!.getField().getLeftMostCreature()?.attackPlayer(target: self.player2!, damage: 1)
-                let params = [
-                    "action" : "directAttack",
-                    "attackerSlot" : self.player1!.getField().getLeftMostCreature()!.slot
-                ] as [String : Any]
-                debugprint(params.description)
-                self.socket.emit("actionSelect", params)
-            }
+        
+        if self.player2!.getField().hasCreatures() {
+            let params = [
+                "action" : "attack",
+                "attackerSlot" : self.player1!.getField().getLeftMostCreature()!.slot,
+                "defenderSlot" : self.player2!.getField().getLeftMostCreature()!.slot
+            ] as [String : Any]
+            debugprint(params.description)
+            self.socket.emit("actionSelect", params)
         } else {
-            if self.player1!.getField().hasCreatures() {
-                self.player2!.getField().getLeftMostCreature()?.attack(
-                    target: self.player1!.getField().getLeftMostCreature()!,
-                    destroyed: 1
-                )
-            } else {
-                self.player2!.getField().getLeftMostCreature()?.attackPlayer(target: self.player1!, damage: 1)
-            }
+            let params = [
+                "action" : "directAttack",
+                "attackerSlot" : self.player1!.getField().getLeftMostCreature()!.slot
+            ] as [String : Any]
+            debugprint(params.description)
+            self.socket.emit("actionSelect", params)
         }
     }
     
@@ -376,71 +387,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 self.debugprint("Handling response [\(playerId),\(event),\(result.description)]")
                 self.spriteScene.announcement = "\(playerId) \(event)"
                 switch event {
-                    case "draw" :
-                        let cardId = result[0]
-                        if playerId == self.playerId {
-                            self.player1?.draw(cardId)
-                            self.configureButtons(true)
-                        } else {
-                            self.player2?.draw(cardId)
-                        }
-                    case "play" :
-                        let handSlot = result[0]
-                        let opCode = result[1]
-                        
-                        //Remove card from hand
-                        if playerId == self.playerId {
-                            self.player1?.playCard(handSlot: handSlot)
-                        } else {
-                            self.player2?.playCard(handSlot: handSlot)
-                        }
-                        
-                        //Resolve effect
-                        if opCode == 0 {    //summon
-                            let fieldSlot = result[2]
-                            let cardId = result[3]
-                            if playerId == self.playerId {
-                                self.player1?.summonCreature(cardId: cardId,fieldSlot: fieldSlot)
-                            } else {
-                                self.player2?.summonCreature(cardId: cardId,fieldSlot: fieldSlot)
-                            }
-                        } else if opCode == 1 {//gain life
-                            let affectedPlayer     = result[2]
-                            let amountOfLifeGained = result[3]
-                            if (playerId == self.playerId && affectedPlayer == 0) ||
-                                (playerId != self.playerId && affectedPlayer == 1) {
-                                print("This player gained one life")
-                                self.player1?.gainLife(amount: amountOfLifeGained)
-                            } else {
-                                print("Other player gained one life")
-                                self.player2?.gainLife(amount: amountOfLifeGained)
-                            }
-                        }
-                        self.configureButtons(playerId == self.playerId)
-                    case "attack" :
-                        let attackerSlot = result[0]
-                        let defenderSlot = result[1]
-                        let destroyed    = result[2]
-                        
-                        if playerId == self.playerId {
-                            self.player1!.getField().getCreature(slot: attackerSlot)?.attack(
-                                target: self.player2!.getField().getCreature(slot: defenderSlot)!,
-                                destroyed: destroyed
-                            )
-                        } else {
-                            self.player2!.getField().getCreature(slot: attackerSlot)?.attack(
-                                target: self.player1!.getField().getCreature(slot: defenderSlot)!,
-                                destroyed: destroyed
-                            )
-                        }
-                    case "directAttack" :
-                            let attackerSlot = result[0]
-                            let damageDealt = result[1]
-                            if playerId == self.playerId {
-                                self.player1!.getField().getCreature(slot: attackerSlot)?.attackPlayer(target: self.player2!, damage: damageDealt)
-                            } else {
-                                self.player2!.getField().getCreature(slot: attackerSlot)?.attackPlayer(target: self.player1!, damage: damageDealt)
-                            }
+                    case "draw" : self.drawHandler(playerId, result)
+                    case "play" : self.playHandler(playerId, result)
+                    case "attack" : self.attackHandler(playerId, result)
+                    case "directAttack" : self.directAttackHandler(playerId, result)
                     case "endTurn" :
                         self.configureButtons(!(playerId == self.playerId))
                     default :
@@ -451,6 +401,85 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
     }
     
+    // MARK: Socket Game-Specific Events
+    
+    func drawHandler(_ playerId:String, _ result:[Int]) {
+        let cardId = result[0]
+        if playerId == self.playerId {
+            self.player1?.draw(cardId)
+            self.configureButtons(true)
+        } else {
+            self.player2?.draw(cardId)
+        }
+    }
+    
+    func playHandler(_ playerId:String, _ result:[Int]) {
+        let handSlot = result[0]
+        let opCode = result[1]
+        
+        //Remove card from hand
+        if playerId == self.playerId {
+            self.player1?.playCard(handSlot: handSlot)
+        } else {
+            self.player2?.playCard(handSlot: handSlot)
+        }
+        
+        //Resolve effect
+        if opCode == 0 {    //summon
+            let fieldSlot = result[2]
+            let cardId = result[3]
+            if playerId == self.playerId {
+                self.player1?.summonCreature(cardId: cardId,fieldSlot: fieldSlot)
+            } else {
+                self.player2?.summonCreature(cardId: cardId,fieldSlot: fieldSlot)
+            }
+        } else if opCode == 1 {//gain life
+            let affectedPlayer     = result[2]
+            let amountOfLifeGained = result[3]
+            if (playerId == self.playerId && affectedPlayer == 0) ||
+                (playerId != self.playerId && affectedPlayer == 1) {
+                print("This player gained one life")
+                self.player1?.gainLife(amount: amountOfLifeGained)
+            } else {
+                print("Other player gained one life")
+                self.player2?.gainLife(amount: amountOfLifeGained)
+            }
+        }
+        self.configureButtons(playerId == self.playerId)
+    }
+    
+    func attackHandler(_ playerId:String, _ result:[Int]) {
+        let attackerSlot = result[0]
+        let defenderSlot = result[1]
+        let destroyed    = result[2]
+        var attacker: SCNCreature
+        var target: SCNCreature
+        if playerId == self.playerId {
+            attacker = self.player1!.getField().getCreature(slot: attackerSlot)!
+            target = self.player2!.getField().getCreature(slot: defenderSlot)!
+        } else {
+            attacker = self.player2!.getField().getCreature(slot: attackerSlot)!
+            target = self.player1!.getField().getCreature(slot: defenderSlot)!
+        }
+        attacker.attack(target: target, destroyed: destroyed)
+        
+        DispatchQueue.main.async {
+            attacker.attack(target: target, destroyed: destroyed)
+            self.attackButton.isEnabled = true
+        }
+    }
+    
+    func directAttackHandler(_ playerId:String, _ result:[Int]) {
+        let attackerSlot = result[0]
+        let damageDealt = result[1]
+        if playerId == self.playerId {
+            self.player1!.getField().getCreature(slot: attackerSlot)?.attackPlayer(target: self.player2!, damage: damageDealt)
+        } else {
+            self.player2!.getField().getCreature(slot: attackerSlot)?.attackPlayer(target: self.player1!, damage: damageDealt)
+        }
+    }
+    
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -459,7 +488,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let configuration = ARWorldTrackingConfiguration()
         
         // Set debug options
-        self.sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
+        //self.sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin]
 
         // Run the view's session
         self.sceneView.session.run(configuration)

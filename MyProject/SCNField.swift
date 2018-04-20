@@ -16,7 +16,7 @@ class SCNField: SCNNode {
     static let CREATURE_CENTROID_GAP: Float = 2.0
     
     init(config: [Int], scene: SCNScene) {
-        NSLog("Building field with \(config.description)")
+
         self.scene = scene
         self.creatures = [SCNCreature?](repeating: nil, count: SCNField.MAX_CREATURES)
         super.init()
@@ -67,7 +67,6 @@ class SCNField: SCNNode {
         creature.slot = slot
         creature.position = SCNVector3(x: -4.0 + SCNField.CREATURE_CENTROID_GAP * Float(slot), y: 0.0, z: 0.0)
         self.addChildNode(creature)
-        //add creature.appear()
         creature.summon(playSound: false);
         return true
     }

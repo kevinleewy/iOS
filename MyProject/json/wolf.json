@@ -1,8 +1,9 @@
 {
     "name" : "Wolf",
-    "scene" : "art.scnassets/wolf/wolf.dae",
+    "scene" : "art.scnassets/wolf2/wolf_animation_idle.dae",
+    "idle"  : "art.scnassets/wolf2/wolf_animation_idle.dae",
     "card_image" : "card_creature_wolf",
     "large_card_image" : "card_creature_wolf_large",
     "sound_file" : "audio/wolf_howl.wav",
-    "scale" : 0.5
+    "scale" : 2.0
 }

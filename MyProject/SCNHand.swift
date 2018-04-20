@@ -15,7 +15,7 @@ class SCNHand: SCNNode {
     static let HAND_WIDTH: Float = 0.4 //40cm
     
     init(config: [Int], scene: SCNScene) {
-        NSLog("Building hand with \(config.description)")
+
         self.scene = scene
         self.hand = []
         
