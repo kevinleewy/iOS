@@ -149,7 +149,7 @@
                                     <color key="titleColor" red="0.94283435510000002" green="1" blue="0.1962004597" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
                                 <connections>
-                                    <segue destination="BV1-FR-VrT" kind="show" id="h9j-ET-I9j"/>
+                                    <segue destination="BV1-FR-VrT" kind="show" identifier="ToGameView" id="h9j-ET-I9j"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XMr-Nb-Czb">
@@ -159,7 +159,7 @@
                                     <color key="titleColor" red="0.94283435510000002" green="1" blue="0.1962004597" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
                                 <connections>
-                                    <action selector="menuButton1Action:" destination="SKJ-ff-KJ1" eventType="touchUpInside" id="KKw-yp-aZW"/>
+                                    <segue destination="SJX-Vu-jXi" kind="show" identifier="ToGameRoomAsPlayer" id="SCZ-lr-7aR"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ajv-ip-z6A">
@@ -201,6 +201,59 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CpE-ca-8x9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-666.39999999999998" y="31.934032983508249"/>
+        </scene>
+        <!--Game Room View Controller-->
+        <scene sceneID="BeN-Rp-TCh">
+            <objects>
+                <viewController id="SJX-Vu-jXi" customClass="GameRoomViewController" customModule="MyProject" customModuleProvider="target" sceneMemberID="viewController">
+                    <stackView key="view" opaque="NO" contentMode="scaleToFill" axis="vertical" id="4QD-hI-eNl">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fRn-cy-4Yd" customClass="GameRoomPlayersView" customModule="MyProject" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="300"/>
+                                <color key="backgroundColor" red="1" green="0.80844941676773008" blue="0.81258937572094947" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="300" id="Kuu-MW-sgk"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="56N-mV-weq" customClass="GameRoomSpectatorsView" customModule="MyProject" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="300" width="375" height="250"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="250" id="XoT-oO-EpO"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nzc-QS-aGB" customClass="GameRoomControlPanelView" customModule="MyProject" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="550" width="375" height="117"/>
+                                <color key="backgroundColor" red="0.29166095089553512" green="0.74670024897736664" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                            </view>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="nzc-QS-aGB" firstAttribute="trailing" secondItem="v3n-Hw-N7T" secondAttribute="trailing" id="2Eg-ab-sZC"/>
+                            <constraint firstAttribute="trailing" secondItem="fRn-cy-4Yd" secondAttribute="trailing" id="8FD-yR-0RD"/>
+                            <constraint firstItem="fRn-cy-4Yd" firstAttribute="top" secondItem="4QD-hI-eNl" secondAttribute="top" id="8Q8-wj-RW7"/>
+                            <constraint firstItem="56N-mV-weq" firstAttribute="trailing" secondItem="v3n-Hw-N7T" secondAttribute="trailing" id="DuC-hz-kyD"/>
+                            <constraint firstItem="nzc-QS-aGB" firstAttribute="top" secondItem="56N-mV-weq" secondAttribute="bottom" id="KiR-pH-iM3"/>
+                            <constraint firstItem="nzc-QS-aGB" firstAttribute="top" secondItem="56N-mV-weq" secondAttribute="bottom" id="NHK-ln-w3U"/>
+                            <constraint firstItem="56N-mV-weq" firstAttribute="leading" secondItem="v3n-Hw-N7T" secondAttribute="leading" id="NNE-kp-EWG"/>
+                            <constraint firstItem="fRn-cy-4Yd" firstAttribute="leading" secondItem="4QD-hI-eNl" secondAttribute="leading" id="bjq-dJ-s3B"/>
+                            <constraint firstItem="nzc-QS-aGB" firstAttribute="bottom" secondItem="v3n-Hw-N7T" secondAttribute="bottom" id="dMJ-oG-tzz"/>
+                            <constraint firstItem="nzc-QS-aGB" firstAttribute="leading" secondItem="v3n-Hw-N7T" secondAttribute="leading" id="qGH-FJ-OGd"/>
+                            <constraint firstItem="56N-mV-weq" firstAttribute="top" secondItem="fRn-cy-4Yd" secondAttribute="bottom" id="xI2-DY-Jvk"/>
+                            <constraint firstItem="56N-mV-weq" firstAttribute="top" secondItem="fRn-cy-4Yd" secondAttribute="bottom" id="xR8-xg-E6F"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="v3n-Hw-N7T"/>
+                    </stackView>
+                    <connections>
+                        <outlet property="controlPanelView" destination="nzc-QS-aGB" id="sr9-hy-aXb"/>
+                        <outlet property="playersView" destination="fRn-cy-4Yd" id="r8Y-ZB-gKc"/>
+                        <outlet property="spectatorsView" destination="56N-mV-weq" id="PW2-TX-K18"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YDC-l0-Ncs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="580" y="512.29385307346331"/>
         </scene>
     </scenes>
     <resources>

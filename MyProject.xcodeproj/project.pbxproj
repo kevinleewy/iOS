@@ -22,6 +22,10 @@
 		3D379E31207C60F5007AF687 /* SCNLife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D379E30207C60F5007AF687 /* SCNLife.swift */; };
 		3D379E33207C7A59007AF687 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 3D379E32207C7A59007AF687 /* Podfile */; };
 		3D556182208A825400B67467 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D556181208A825400B67467 /* MenuViewController.swift */; };
+		3D556187208A97B100B67467 /* GameRoomPlayersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D556186208A97B100B67467 /* GameRoomPlayersView.swift */; };
+		3D556189208A97E100B67467 /* GameRoomSpectatorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D556188208A97E100B67467 /* GameRoomSpectatorsView.swift */; };
+		3D55618B208A9F3A00B67467 /* GameRoomControlPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D55618A208A9F3A00B67467 /* GameRoomControlPanelView.swift */; };
+		3D55618E208AAACA00B67467 /* GameRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D55618D208AAACA00B67467 /* GameRoomViewController.swift */; };
 		3D8D2CAA2085471F008C77CD /* SKPlayerStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D2CA92085471F008C77CD /* SKPlayerStats.swift */; };
 		3DA937172071BD3A0065E7E5 /* JSONData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA937162071BD3A0065E7E5 /* JSONData.swift */; };
 		3DA937222072F3200065E7E5 /* SCNField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA937212072F3200065E7E5 /* SCNField.swift */; };
@@ -80,6 +84,10 @@
 		3D379E30207C60F5007AF687 /* SCNLife.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCNLife.swift; sourceTree = "<group>"; };
 		3D379E32207C7A59007AF687 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
 		3D556181208A825400B67467 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		3D556186208A97B100B67467 /* GameRoomPlayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomPlayersView.swift; sourceTree = "<group>"; };
+		3D556188208A97E100B67467 /* GameRoomSpectatorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomSpectatorsView.swift; sourceTree = "<group>"; };
+		3D55618A208A9F3A00B67467 /* GameRoomControlPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomControlPanelView.swift; sourceTree = "<group>"; };
+		3D55618D208AAACA00B67467 /* GameRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomViewController.swift; sourceTree = "<group>"; };
 		3D8D2CA92085471F008C77CD /* SKPlayerStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKPlayerStats.swift; sourceTree = "<group>"; };
 		3DA937162071BD3A0065E7E5 /* JSONData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONData.swift; sourceTree = "<group>"; };
 		3DA937212072F3200065E7E5 /* SCNField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNField.swift; sourceTree = "<group>"; };
@@ -153,13 +161,14 @@
 		3D155D24206F225E0097B508 /* MyProject */ = {
 			isa = PBXGroup;
 			children = (
+				3D55618C208AAA7700B67467 /* Models */,
+				3D556185208A979300B67467 /* Views */,
 				3D556183208A826900B67467 /* Controllers */,
 				3D155D25206F225E0097B508 /* AppDelegate.swift */,
 				3D155D9720706A4A0097B508 /* Anchor.swift */,
 				3D8D2CA92085471F008C77CD /* SKPlayerStats.swift */,
 				3DB536BE2081636B0062324A /* OverlayScene.swift */,
 				3D155D55206F2FF90097B508 /* GameScene.swift */,
-				3D155D29206F225E0097B508 /* ViewController.swift */,
 				3DA937162071BD3A0065E7E5 /* JSONData.swift */,
 				3D155D9520705E7B0097B508 /* SCNCard.swift */,
 				3D155D93206FFF5A0097B508 /* SCNCreature.swift */,
@@ -203,8 +212,27 @@
 			isa = PBXGroup;
 			children = (
 				3D556181208A825400B67467 /* MenuViewController.swift */,
+				3D155D29206F225E0097B508 /* ViewController.swift */,
+				3D55618D208AAACA00B67467 /* GameRoomViewController.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		3D556185208A979300B67467 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3D556186208A97B100B67467 /* GameRoomPlayersView.swift */,
+				3D556188208A97E100B67467 /* GameRoomSpectatorsView.swift */,
+				3D55618A208A9F3A00B67467 /* GameRoomControlPanelView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		3D55618C208AAA7700B67467 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		45D205412ACBB8B620037D79 /* Frameworks */ = {
@@ -450,17 +478,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D55618B208A9F3A00B67467 /* GameRoomControlPanelView.swift in Sources */,
 				3DA93728207326AF0065E7E5 /* Util.swift in Sources */,
 				3D155D94206FFF5A0097B508 /* SCNCreature.swift in Sources */,
 				3DA937222072F3200065E7E5 /* SCNField.swift in Sources */,
+				3D556189208A97E100B67467 /* GameRoomSpectatorsView.swift in Sources */,
 				3D155D56206F2FF90097B508 /* GameScene.swift in Sources */,
 				3D8D2CAA2085471F008C77CD /* SKPlayerStats.swift in Sources */,
 				3DB536BF2081636B0062324A /* OverlayScene.swift in Sources */,
 				3D379E31207C60F5007AF687 /* SCNLife.swift in Sources */,
 				3D556182208A825400B67467 /* MenuViewController.swift in Sources */,
+				3D55618E208AAACA00B67467 /* GameRoomViewController.swift in Sources */,
 				3DA9372620731FF60065E7E5 /* SCNHand.swift in Sources */,
 				3DA93724207300B90065E7E5 /* SCNPlayer.swift in Sources */,
 				3DED7DC92086FA9900B27625 /* TrayLauncher.swift in Sources */,
+				3D556187208A97B100B67467 /* GameRoomPlayersView.swift in Sources */,
 				3D155D9620705E7B0097B508 /* SCNCard.swift in Sources */,
 				3D155D2A206F225E0097B508 /* ViewController.swift in Sources */,
 				3DA937172071BD3A0065E7E5 /* JSONData.swift in Sources */,
