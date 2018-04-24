@@ -115,7 +115,7 @@ class SCNCreature: SCNNode {
         }*/
     }
     
-    func attack(target: SCNCreature, destroyed: Int){
+    func attack(target: SCNCreature, destroyed: Bool){
         let newAttackParticles = self.attackParticles.clone()
         newAttackParticles.transform = self.worldTransform
         newAttackParticles.transform.m42 += 0.3 //raise height by 30cm
@@ -146,7 +146,7 @@ class SCNCreature: SCNNode {
         ]))
 
         var destroyedAction:SCNAction = SCNAction()
-        if destroyed != 0 {
+        if destroyed {
             destroyedAction = SCNAction.sequence([
                 SCNAction.fadeOut(duration: 1.0),
                 SCNAction.run({node in

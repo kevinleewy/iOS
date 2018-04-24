@@ -10,6 +10,7 @@ import ARKit
 
 class SCNPlayer: SCNNode {
     
+    private var id: String
     private var scene: SCNScene
     private var field: SCNField
     private var hand : SCNHand
@@ -28,6 +29,7 @@ class SCNPlayer: SCNNode {
     
     init(config: [String: Any], scene: SCNScene, depth: Float) {
         
+        self.id = config["id"] as! String
         let handConf = config["hand"] as! [Int]
         let fieldConf = config["field"] as! [Int]
         self.life = config["life"] as! Int
@@ -50,7 +52,11 @@ class SCNPlayer: SCNNode {
     required init(coder x: NSCoder){
         fatalError("NSCoding not supported")
     }
-        
+    
+    public func getId() -> String {
+        return self.id
+    }
+    
     public func getField() -> SCNField {
         return self.field
     }

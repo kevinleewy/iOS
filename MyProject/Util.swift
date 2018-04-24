@@ -39,3 +39,20 @@ extension UIApplication {
     }
     
 }
+
+func displayError(message:String){
+    DispatchQueue.main.async(execute: {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
+    })
+}
+
+
+//MARK: Delay func
+//Usage: delay(1){delayed code}
+
+func delay(_ delay:Double, closure:@escaping ()->()) {
+    DispatchQueue.main.asyncAfter(
+        deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
+}

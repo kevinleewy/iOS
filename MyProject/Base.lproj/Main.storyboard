@@ -126,7 +126,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="580" y="-281"/>
+            <point key="canvasLocation" x="1239" y="32"/>
         </scene>
         <!--Menu View Controller-->
         <scene sceneID="zco-FN-Qjb">
@@ -140,26 +140,26 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </skView>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="wooden_board" translatesAutoresizingMaskIntoConstraints="NO" id="ip5-cv-AQA">
-                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                                <rect key="frame" x="-152.5" y="96" width="680" height="475"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rwp-D0-74Q">
                                 <rect key="frame" x="46" y="150" width="283" height="116"/>
-                                <fontDescription key="fontDescription" name="Papyrus" family="Papyrus" pointSize="50"/>
-                                <state key="normal" title="Start" backgroundImage="wooden_button">
-                                    <color key="titleColor" red="0.94283435510000002" green="1" blue="0.1962004597" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                </state>
-                                <connections>
-                                    <segue destination="BV1-FR-VrT" kind="show" identifier="ToGameView" id="h9j-ET-I9j"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XMr-Nb-Czb">
-                                <rect key="frame" x="46" y="286" width="283" height="116"/>
                                 <fontDescription key="fontDescription" name="Papyrus" family="Papyrus" pointSize="50"/>
                                 <state key="normal" title="Create" backgroundImage="wooden_button">
                                     <color key="titleColor" red="0.94283435510000002" green="1" blue="0.1962004597" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </state>
                                 <connections>
-                                    <segue destination="SJX-Vu-jXi" kind="show" identifier="ToGameRoomAsPlayer" id="SCZ-lr-7aR"/>
+                                    <action selector="menuButton0Action:" destination="SKJ-ff-KJ1" eventType="touchUpInside" id="uhU-7v-Bw9"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XMr-Nb-Czb">
+                                <rect key="frame" x="46" y="286" width="283" height="116"/>
+                                <fontDescription key="fontDescription" name="Papyrus" family="Papyrus" pointSize="50"/>
+                                <state key="normal" title="Join" backgroundImage="wooden_button">
+                                    <color key="titleColor" red="0.94283435510000002" green="1" blue="0.1962004597" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                </state>
+                                <connections>
+                                    <action selector="menuButton1Action:" destination="SKJ-ff-KJ1" eventType="touchUpInside" id="sRQ-9p-pdp"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ajv-ip-z6A">
@@ -175,27 +175,26 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="ip5-cv-AQA" secondAttribute="trailing" id="1Y2-Xi-1Ct"/>
                             <constraint firstItem="Rwp-D0-74Q" firstAttribute="top" secondItem="eYE-fB-4qU" secondAttribute="top" constant="130" id="49A-Kw-R84"/>
-                            <constraint firstItem="XMr-Nb-Czb" firstAttribute="top" secondItem="Rwp-D0-74Q" secondAttribute="bottom" constant="20" id="4AY-T9-N9g"/>
                             <constraint firstItem="7xX-7W-iyI" firstAttribute="top" secondItem="7DF-VJ-TBB" secondAttribute="top" id="64H-D8-nOB"/>
                             <constraint firstItem="ip5-cv-AQA" firstAttribute="centerY" secondItem="7DF-VJ-TBB" secondAttribute="centerY" id="7yB-PC-R5N"/>
                             <constraint firstItem="7xX-7W-iyI" firstAttribute="bottom" secondItem="eYE-fB-4qU" secondAttribute="bottom" id="Ci9-tb-16X"/>
                             <constraint firstItem="ip5-cv-AQA" firstAttribute="centerX" secondItem="7DF-VJ-TBB" secondAttribute="centerX" id="D0Q-Rb-RPG"/>
+                            <constraint firstItem="XMr-Nb-Czb" firstAttribute="top" secondItem="Rwp-D0-74Q" secondAttribute="bottom" constant="20" id="HYc-if-kGr"/>
+                            <constraint firstItem="ajv-ip-z6A" firstAttribute="top" secondItem="XMr-Nb-Czb" secondAttribute="bottom" constant="20" id="Hxd-wu-003"/>
                             <constraint firstItem="ajv-ip-z6A" firstAttribute="centerX" secondItem="7DF-VJ-TBB" secondAttribute="centerX" id="blU-X1-Bqj"/>
                             <constraint firstItem="Rwp-D0-74Q" firstAttribute="centerX" secondItem="7DF-VJ-TBB" secondAttribute="centerX" id="dKP-zk-xMy"/>
                             <constraint firstItem="7xX-7W-iyI" firstAttribute="trailing" secondItem="eYE-fB-4qU" secondAttribute="trailing" id="heV-aR-iAA"/>
                             <constraint firstItem="7xX-7W-iyI" firstAttribute="leading" secondItem="eYE-fB-4qU" secondAttribute="leading" id="ife-2O-LNk"/>
                             <constraint firstItem="XMr-Nb-Czb" firstAttribute="centerX" secondItem="7DF-VJ-TBB" secondAttribute="centerX" id="k4x-1a-zFY"/>
-                            <constraint firstItem="ip5-cv-AQA" firstAttribute="leading" secondItem="7DF-VJ-TBB" secondAttribute="leading" id="n7d-L9-Ooo"/>
-                            <constraint firstItem="ajv-ip-z6A" firstAttribute="top" secondItem="XMr-Nb-Czb" secondAttribute="bottom" constant="20" id="r4k-96-eKD"/>
-                            <constraint firstItem="ip5-cv-AQA" firstAttribute="top" secondItem="eYE-fB-4qU" secondAttribute="top" id="tLS-E0-97b"/>
-                            <constraint firstItem="eYE-fB-4qU" firstAttribute="bottom" secondItem="ip5-cv-AQA" secondAttribute="bottom" id="zJO-sx-f3Q"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="eYE-fB-4qU"/>
                     </view>
                     <connections>
+                        <outlet property="menuButton0" destination="Rwp-D0-74Q" id="WXf-YW-vPo"/>
                         <outlet property="menuButton1" destination="XMr-Nb-Czb" id="H5e-Wu-jK2"/>
+                        <segue destination="SJX-Vu-jXi" kind="show" identifier="ToGameRoomAsPlayer" id="0af-cO-gKk"/>
+                        <segue destination="SJX-Vu-jXi" kind="show" identifier="ToGameRoomAsSpectator" id="2Tb-Ya-Z0l"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CpE-ca-8x9" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -226,7 +225,53 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nzc-QS-aGB" customClass="GameRoomControlPanelView" customModule="MyProject" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="550" width="375" height="117"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UhD-hT-y5o">
+                                        <rect key="frame" x="255" y="38.5" width="80" height="40"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="80" id="SdF-Qw-HSi"/>
+                                            <constraint firstAttribute="height" constant="40" id="UlC-CV-1AX"/>
+                                        </constraints>
+                                        <state key="normal" title="Start"/>
+                                        <connections>
+                                            <action selector="startButtonAction:" destination="SJX-Vu-jXi" eventType="touchUpInside" id="CWo-cZ-jXZ"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ouP-z9-zQg">
+                                        <rect key="frame" x="40" y="38" width="80" height="40"/>
+                                        <color key="backgroundColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="Oq6-w7-maI"/>
+                                            <constraint firstAttribute="width" constant="80" id="owO-jP-9Q6"/>
+                                        </constraints>
+                                        <state key="normal" title="Exit"/>
+                                        <connections>
+                                            <segue destination="SKJ-ff-KJ1" kind="show" identifier="BackToMainMenu" id="2lw-un-wve"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DeL-nS-qcz">
+                                        <rect key="frame" x="147.5" y="38.5" width="80" height="40"/>
+                                        <color key="backgroundColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="80" id="H9u-ef-9iN"/>
+                                            <constraint firstAttribute="height" constant="40" id="VB6-dU-Qsf"/>
+                                        </constraints>
+                                        <state key="normal" title="Refresh"/>
+                                        <connections>
+                                            <action selector="refreshButtonAction:" destination="SJX-Vu-jXi" eventType="touchUpInside" id="chm-dp-be5"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <color key="backgroundColor" red="0.29166095089553512" green="0.74670024897736664" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstItem="DeL-nS-qcz" firstAttribute="centerX" secondItem="nzc-QS-aGB" secondAttribute="centerX" id="28R-SY-KVf"/>
+                                    <constraint firstAttribute="trailing" secondItem="UhD-hT-y5o" secondAttribute="trailing" constant="40" id="2Xn-wY-NYh"/>
+                                    <constraint firstItem="DeL-nS-qcz" firstAttribute="centerY" secondItem="nzc-QS-aGB" secondAttribute="centerY" id="DHC-sb-nzE"/>
+                                    <constraint firstItem="UhD-hT-y5o" firstAttribute="centerY" secondItem="nzc-QS-aGB" secondAttribute="centerY" id="ewU-cL-buZ"/>
+                                    <constraint firstItem="ouP-z9-zQg" firstAttribute="centerY" secondItem="nzc-QS-aGB" secondAttribute="centerY" id="ilm-xW-dbD"/>
+                                    <constraint firstItem="ouP-z9-zQg" firstAttribute="leading" secondItem="nzc-QS-aGB" secondAttribute="leading" constant="40" id="lty-tH-WDr"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <constraints>
@@ -249,15 +294,20 @@
                         <outlet property="controlPanelView" destination="nzc-QS-aGB" id="sr9-hy-aXb"/>
                         <outlet property="playersView" destination="fRn-cy-4Yd" id="r8Y-ZB-gKc"/>
                         <outlet property="spectatorsView" destination="56N-mV-weq" id="PW2-TX-K18"/>
+                        <outlet property="startButton" destination="UhD-hT-y5o" id="1wI-vg-pWx"/>
+                        <segue destination="BV1-FR-VrT" kind="show" identifier="ToGame" id="kLE-kx-Bnt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YDC-l0-Ncs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="580" y="512.29385307346331"/>
+            <point key="canvasLocation" x="322" y="32"/>
         </scene>
     </scenes>
     <resources>
         <image name="wooden_board" width="680" height="475"/>
         <image name="wooden_button" width="283" height="116"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="0af-cO-gKk"/>
+    </inferredMetricsTieBreakers>
 </document>

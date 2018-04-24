@@ -64,12 +64,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     var player1: SCNPlayer?
     var player2: SCNPlayer?
+    var players = [SCNPlayer]()
     
     var manager: SocketManager?
     var socket: SocketIOClient!
     var host: String = ""
     
-    var DEBUG = false
+    var DEBUG = true
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,7 +85,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         attachSpotLight()
         
         // Establish connection with server
-        connectToServer()
+        //connectToServer()
+        
+        // Pick a player
+        //self.selectPlayer()
+        
+        // Set Up Socket Events
+        self.setSocketEvents()
         
     }
     
@@ -102,6 +109,23 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let spotNode = SCNNode()
         spotNode.light = spotLight
         self.sceneView.pointOfView?.addChildNode(spotNode)
+    }
+    
+    func selectPlayer(){
+        DispatchQueue.main.async {
+
+            let alert = UIAlertController(title: "Player", message: "Select one", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "Player 1", style: .default, handler: { [weak alert] (_) in
+                self.playerId = self.playerId
+            }))
+            
+            alert.addAction(UIAlertAction(title: "Player 2", style: .default, handler: { [weak alert] (_) in
+                self.playerId = "Player2"
+            }))
+            
+            UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
+        }
     }
     
     func connectToServer() {
@@ -132,16 +156,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 self.initSocket()   //initialize sockets
             }))
             
-            // TODO: Spectator option
-            /*
-            alert.addAction(UIAlertAction(title: "Spectator", style: .default, handler: { [weak alert] (_) in
-                let textField = alert?.textFields![0] // Force unwrapping because we know it exists.
-                self.host = (textField?.text)!
-                self.playerId = "Spectator"
-                self.initSocket()   //initialize sockets
-            }))
-             */
-            
             // 4. Present the alert.
             UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
         }
@@ -158,8 +172,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         debugprint("Setting up world")
         debugprint(config.description)
-        let p1conf = config["player1"] as! [String: Any]
-        let p2conf = config["player2"] as! [String: Any]
+        let playersConfig = config["players"] as! [Any]
+        let temp = playersConfig[0] as! [String: Any]
+        
+        var p1conf : [String : Any]
+        var p2conf : [String : Any]
+        if temp["id"] as? String == self.playerId {
+            p1conf = playersConfig[0] as! [String: Any]
+            p2conf = playersConfig[1] as! [String: Any]
+        } else {
+            p1conf = playersConfig[1] as! [String: Any]
+            p2conf = playersConfig[0] as! [String: Any]
+        }
         let turnPlayer = config["turnPlayer"] as! String
         
         
@@ -185,8 +209,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let p2Stats = self.player2?.getStats()
         p2Stats?.position = CGPoint(x: 40, y: self.spriteScene.size.height - 80)
         self.spriteScene.addChild(p2Stats!)
-        
-        
         
         //Configure buttons
         self.configureButtons(turnPlayer == self.playerId)
@@ -232,7 +254,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     @IBAction func connectAction(_ sender: Any) {
-
         if isWorldSetUp {
             debugprint("Leaving game")
             self.socket.emit("leaveGame",[])
@@ -256,13 +277,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     @IBAction func drawAction(_ sender: Any) {
         debugprint("Drawing a card")
-        /*if turn {
-            self.player1!.getHand().draw(Int(arc4random_uniform(3)))
-        } else {
-            self.player2!.getHand().draw(Int(arc4random_uniform(3)))
-        }
-        turn = !turn;*/
-
         self.socket.emit("actionSelect", ["action":"draw"])
     }
     
@@ -272,6 +286,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             let params = [
                 "action" : "attack",
                 "attackerSlot" : self.player1!.getField().getLeftMostCreature()!.slot,
+                "targetPlayerId" : self.player2!.getId(),
                 "defenderSlot" : self.player2!.getField().getLeftMostCreature()!.slot
             ] as [String : Any]
             debugprint(params.description)
@@ -279,7 +294,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         } else {
             let params = [
                 "action" : "directAttack",
-                "attackerSlot" : self.player1!.getField().getLeftMostCreature()!.slot
+                "attackerSlot" : self.player1!.getField().getLeftMostCreature()!.slot,
+                "targetPlayerId" : self.player2!.getId(),
             ] as [String : Any]
             debugprint(params.description)
             self.socket.emit("actionSelect", params)
@@ -290,40 +306,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         NSLog("Requesting phase change")
         self.socket.emit("actionSelect", ["action":"nextPhase"])
     }
-    
-    
-    /*
-    func getHeadlines() {
-        
-        let jsonURLString:String = "http://\(self.host):3000/headlines/?token=ABC438s";
-        guard let url = URL(string: jsonURLString) else
-        {return}
-        
-        URLSession.shared.dataTask(with: url) { (data, response, err) in
-            
-            guard let data = data else { return }
-            
-            do {
-                let newsAPIStruct = try
-                    JSONDecoder().decode(NewsAPIStruct.self, from: data)
-                
-                for item in newsAPIStruct.headlines {
-                    NSLog(item.headline);
-                };
-                /*
-                DispatchQueue.main.async(execute: {
-                    self.tableView.reloadData()
-                })
-                */
-            } catch let jsonErr {
-                print ("error: ", jsonErr)
-            }
-        }.resume();
-    };*/
+
     
     // MARK: Socket Events
     
     private func setSocketEvents() {
+        
+        self.socket.removeAllHandlers()
+        
         self.socket.on(clientEvent: .connect) {data, ack in
             print("socket connected");
         };
@@ -342,26 +332,20 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self.socket.on(clientEvent: .error, callback: {data, ack in
             print("socket error");
         });
-        /*
-        self.socket.on("headlines_updated") {data, ack in
-            self.getHeadlines();
-        };*/
 
+        self.socket.on("appError") {data, ack in
+            let err = data[0] as! [Any]
+            let errorCode = err[0] as! Int
+            let errorMsg = err[1] as! String
+            displayError(message: errorMsg)
+            print("Error \(errorCode.description): \(errorMsg)")
+        }
+        
         self.socket.on("joinedGame") {data, ack in
             self.debugprint(data.description);
-            let dataJSON = data[0] as! [String : Any]
-            
-            //print error and exit if any
-            if let status = dataJSON["status"] as? String {
-                if status == "error" {
-                    self.debugprint(dataJSON["value"].debugDescription)
-                    return
-                }
-            }
-            
             self.debugprint("Joined game")
             
-            if let config = dataJSON["value"] as? [String : Any] {
+            if let config = data[0] as? [String : Any] {
                 self.setUpWorld(config: config)
                 self.isWorldSetUp = true
                 self.connectButton.setTitle("Leave", for: .normal)
@@ -370,31 +354,40 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         self.socket.on("actionResponse") {data, ack in
             self.debugprint(data.description);
-            let dataJSON = data[0] as! [String : Any]
-            
-            //print error and exit if any
-            if let status = dataJSON["status"] as? String {
-                if status == "error" {
-                    self.debugprint(dataJSON["value"].debugDescription)
-                    return
-                }
-            }
-            
-            if let val = dataJSON["value"] as? [String : Any] {
-                let playerId = val["player"] as! String
-                let event = val["event"] as! String
-                let result = val["result"] as! [Int]
-                self.debugprint("Handling response [\(playerId),\(event),\(result.description)]")
+            let dataJSON = data[0] as! [[String:Any]]
+            for eventObj in dataJSON {
+                let playerId = eventObj["playerId"] as! String
+                let event = eventObj["event"] as! String
                 self.spriteScene.announcement = "\(playerId) \(event)"
                 switch event {
-                    case "draw" : self.drawHandler(playerId, result)
-                    case "play" : self.playHandler(playerId, result)
-                    case "attack" : self.attackHandler(playerId, result)
-                    case "directAttack" : self.directAttackHandler(playerId, result)
-                    case "endTurn" :
-                        self.configureButtons(!(playerId == self.playerId))
-                    default :
-                        self.debugprint("Received \(event) event")
+                case "draw"   : self.drawHandler(playerId, eventObj["newCard"] as! Int)
+                case "play"   : self.playHandler(playerId, eventObj["cardSlot"] as! Int)
+                case "summon" : self.summonHandler(
+                        playerId,
+                        eventObj["fieldSlot"] as! Int,
+                        eventObj["cardId"] as! Int
+                    )
+                case "heal" : self.healHandler(
+                        playerId,
+                        eventObj["amount"] as! Int
+                    )
+                case "attack" : self.attackHandler(
+                        playerId,
+                        eventObj["attackerSlot"] as! Int,
+                        eventObj["targetPlayerId"] as! String,
+                        eventObj["defenderSlot"] as! Int,
+                        eventObj["targetDestroyed"] as! Bool
+                    )
+                case "directAttack" : self.directAttackHandler(
+                        playerId,
+                        eventObj["attackerSlot"] as! Int,
+                        eventObj["targetPlayerId"] as! String,
+                        eventObj["damageDealt"] as! Int
+                    )
+                case "endTurn" :
+                    self.configureButtons(!(playerId == self.playerId))
+                default :
+                    self.debugprint("Received \(event) event")
                 }
             }
         }
@@ -403,8 +396,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     // MARK: Socket Game-Specific Events
     
-    func drawHandler(_ playerId:String, _ result:[Int]) {
-        let cardId = result[0]
+    func drawHandler(_ playerId:String, _ cardId:Int) {
         if playerId == self.playerId {
             self.player1?.draw(cardId)
             self.configureButtons(true)
@@ -413,9 +405,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
     }
     
-    func playHandler(_ playerId:String, _ result:[Int]) {
-        let handSlot = result[0]
-        let opCode = result[1]
+    func playHandler(_ playerId:String, _ handSlot:Int) {
         
         //Remove card from hand
         if playerId == self.playerId {
@@ -423,35 +413,30 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         } else {
             self.player2?.playCard(handSlot: handSlot)
         }
+        self.configureButtons(playerId == self.playerId)
+    }
+    
+    func summonHandler(_ playerId:String, _ fieldSlot:Int, _ cardId:Int) {
         
-        //Resolve effect
-        if opCode == 0 {    //summon
-            let fieldSlot = result[2]
-            let cardId = result[3]
-            if playerId == self.playerId {
-                self.player1?.summonCreature(cardId: cardId,fieldSlot: fieldSlot)
-            } else {
-                self.player2?.summonCreature(cardId: cardId,fieldSlot: fieldSlot)
-            }
-        } else if opCode == 1 {//gain life
-            let affectedPlayer     = result[2]
-            let amountOfLifeGained = result[3]
-            if (playerId == self.playerId && affectedPlayer == 0) ||
-                (playerId != self.playerId && affectedPlayer == 1) {
-                print("This player gained one life")
-                self.player1?.gainLife(amount: amountOfLifeGained)
-            } else {
-                print("Other player gained one life")
-                self.player2?.gainLife(amount: amountOfLifeGained)
-            }
+        if playerId == self.playerId {
+            self.player1?.summonCreature(cardId: cardId,fieldSlot: fieldSlot)
+        } else {
+            self.player2?.summonCreature(cardId: cardId,fieldSlot: fieldSlot)
         }
         self.configureButtons(playerId == self.playerId)
     }
     
-    func attackHandler(_ playerId:String, _ result:[Int]) {
-        let attackerSlot = result[0]
-        let defenderSlot = result[1]
-        let destroyed    = result[2]
+    func healHandler(_ playerId:String, _ amount:Int) {
+
+        if (playerId == self.playerId) {
+            self.player1?.gainLife(amount: amount)
+        } else {
+            self.player2?.gainLife(amount: amount)
+        }
+    }
+    
+    func attackHandler(_ playerId:String, _ attackerSlot:Int, _ targetPlayerId:String, _ defenderSlot:Int, _ destroyed:Bool) {
+
         var attacker: SCNCreature
         var target: SCNCreature
         if playerId == self.playerId {
@@ -462,16 +447,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             target = self.player1!.getField().getCreature(slot: defenderSlot)!
         }
         attacker.attack(target: target, destroyed: destroyed)
-        
-        DispatchQueue.main.async {
-            attacker.attack(target: target, destroyed: destroyed)
-            self.attackButton.isEnabled = true
-        }
     }
     
-    func directAttackHandler(_ playerId:String, _ result:[Int]) {
-        let attackerSlot = result[0]
-        let damageDealt = result[1]
+    func directAttackHandler(_ playerId:String, _ attackerSlot:Int, _ targetPlayerId:String, _ damageDealt:Int) {
+
         if playerId == self.playerId {
             self.player1!.getField().getCreature(slot: attackerSlot)?.attackPlayer(target: self.player2!, damage: damageDealt)
         } else {
