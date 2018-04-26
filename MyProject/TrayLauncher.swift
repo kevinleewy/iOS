@@ -11,10 +11,17 @@ import SpriteKit
 
 class TrayLauncher: NSObject {
     
-    let tray = UIView()
+    let tray = SKView()
+    let trayHeight:CGFloat = 200
+    var handScene:SKHand    
+    
     var launched: Bool = false
     
     override init() {
+        let window = UIApplication.shared.keyWindow
+        self.handScene = SKHand(size: CGSize(width: window!.frame.width, height: self.trayHeight))
+        self.handScene.scaleMode = .aspectFill
+        tray.presentScene(self.handScene)
         super.init()
     }
     
@@ -33,7 +40,7 @@ class TrayLauncher: NSObject {
             //tray.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissTray)))
             window.addSubview(tray)
             
-            let trayHeight:CGFloat = 200
+            //let trayHeight:CGFloat = 200
             let y = window.frame.height - trayHeight
             self.tray.frame = CGRect(x: 0, y: window.frame.height, width: window.frame.width, height: trayHeight)
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {

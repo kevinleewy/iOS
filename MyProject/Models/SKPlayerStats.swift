@@ -12,35 +12,50 @@ class SKPlayerStats: SKNode {
 
     var lifeNode: SKLabelNode!
     var deckNode: SKLabelNode!
-    var lifeIcon: SKSpriteNode!
-    var deckIcon: SKSpriteNode!
-
-    init(life: Int, deck: Int) {
+    
+    init(id: String, life: Int, deck: Int) {
         
-        self.lifeIcon = SKSpriteNode(imageNamed: "heart_icon")
-        self.lifeIcon.position = CGPoint(x: 0, y: 10)
-        self.lifeIcon.size = CGSize(width: 20, height: 20)
-        self.deckIcon = SKSpriteNode(imageNamed: "deck_icon")
-        self.deckIcon.position = CGPoint(x: 0, y: -30)
-        self.deckIcon.size = CGSize(width: 20, height: 20)
+        let bg1 = SKSpriteNode(imageNamed: "stone_board")
+        bg1.position = CGPoint(x: 20, y: -10)
+        bg1.size = CGSize(width: 115, height: 115)
+        
+        let bg2 = SKSpriteNode(imageNamed: "wooden_board")
+        bg2.position = CGPoint(x: 20, y: -10)
+        bg2.size = CGSize(width: 100, height: 100)
+        
+        let idNode = SKLabelNode(text: "\(id)")
+        idNode.fontName = "DINAlternate-Bold"
+        idNode.fontColor = UIColor.black
+        idNode.fontSize = 20
+        idNode.position = CGPoint(x: 20, y: 10)
+        
+        let lifeIcon = SKSpriteNode(imageNamed: "heart_icon")
+        lifeIcon.position = CGPoint(x: 0, y: -10)
+        lifeIcon.size = CGSize(width: 20, height: 20)
+        let deckIcon = SKSpriteNode(imageNamed: "deck_icon")
+        deckIcon.position = CGPoint(x: 0, y: -40)
+        deckIcon.size = CGSize(width: 20, height: 20)
         
         self.lifeNode = SKLabelNode(text: "\(life)")
         self.lifeNode.fontName = "DINAlternate-Bold"
         self.lifeNode.fontColor = UIColor.black
         self.lifeNode.fontSize = 24
-        self.lifeNode.position = CGPoint(x: 40, y: 0)
+        self.lifeNode.position = CGPoint(x: 40, y: -20)
         
         self.deckNode = SKLabelNode(text: "\(deck)")
         self.deckNode.fontName = "DINAlternate-Bold"
         self.deckNode.fontColor = UIColor.black
         self.deckNode.fontSize = 24
-        self.deckNode.position = CGPoint(x: 40, y: -40)
+        self.deckNode.position = CGPoint(x: 40, y: -50)
         
         super.init()
         
-        self.addChild(self.lifeIcon)
+        self.addChild(bg1)
+        self.addChild(bg2)
+        self.addChild(idNode)
+        self.addChild(lifeIcon)
         self.addChild(self.lifeNode)
-        self.addChild(self.deckIcon)
+        self.addChild(deckIcon)
         self.addChild(self.deckNode)
     }
     

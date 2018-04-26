@@ -15,29 +15,33 @@ class SCNField: SCNNode {
     static let MAX_CREATURES: Int = 5
     static let CREATURE_CENTROID_GAP: Float = 2.0
     
-    init(config: [Int], scene: SCNScene) {
+    init(config: [Any], scene: SCNScene) {
 
         self.scene = scene
         self.creatures = [SCNCreature?](repeating: nil, count: SCNField.MAX_CREATURES)
         super.init()
         self.position = SCNVector3(x: 0.0, y: -2.0, z: -2.0)
-        for (slot, creatureId) in config.enumerated() {
-            var id: String
-
-            guard creatureId >= 0 else { continue }
-            
-            switch creatureId {
-                case 0:
-                    id = "wolf"
-                case 2:
-                    id = "dragon"
-                default:
-                    id = "ivysaur"
+        for (slot, creatureData) in config.enumerated() {
+            if let _ = creatureData as? Int {
+                continue
             }
+            if let creatureDataObj = creatureData as? [String:Any],
+                let creatureId = creatureDataObj["id"] as? Int {
+                var id: String
+                
+                switch creatureId {
+                    case 0:
+                        id = "wolf"
+                    case 2:
+                        id = "dragon"
+                    default:
+                        id = "ivysaur"
+                }
 
-            let creature = SCNCreature(name: "Ally\(slot)", id: id, scene: scene)
-            if !self.addCreature(creature: creature, slot: slot, playSound: false) {
-                NSLog("Failed to add Ally\(slot)")
+                let creature = SCNCreature(name: "Ally\(slot)", id: id, scene: scene)
+                if !self.addCreature(creature: creature, slot: slot, playSound: false) {
+                    NSLog("Failed to add Ally\(slot)")
+                }
             }
         }
     }

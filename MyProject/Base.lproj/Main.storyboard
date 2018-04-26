@@ -33,18 +33,6 @@
                                     <action selector="AttackAction:" destination="BV1-FR-VrT" eventType="touchUpInside" id="Pjs-xN-2XK"/>
                                 </connections>
                             </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KhI-w1-M5h">
-                                <rect key="frame" x="147.5" y="587" width="80" height="40"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="cUR-cZ-a0k"/>
-                                    <constraint firstAttribute="width" constant="80" id="z72-T5-fHG"/>
-                                </constraints>
-                                <state key="normal" title="Draw"/>
-                                <connections>
-                                    <action selector="drawAction:" destination="BV1-FR-VrT" eventType="touchUpInside" id="FpH-s2-BhK"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KeU-uc-mAD">
                                 <rect key="frame" x="275" y="60" width="80" height="40"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -52,33 +40,11 @@
                                     <constraint firstAttribute="width" constant="80" id="G4c-GF-xwa"/>
                                     <constraint firstAttribute="height" constant="40" id="fUc-27-mmh"/>
                                 </constraints>
-                                <state key="normal" title="Join"/>
+                                <state key="normal" title="Join" backgroundImage="wooden_button">
+                                    <color key="titleColor" red="0.94283435510000002" green="1" blue="0.1962004597" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                </state>
                                 <connections>
                                     <action selector="connectAction:" destination="BV1-FR-VrT" eventType="touchUpInside" id="k83-Sh-yfL"/>
-                                </connections>
-                            </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S35-5l-9ez">
-                                <rect key="frame" x="20" y="587" width="80" height="40"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="80" id="2G7-0w-ce6"/>
-                                    <constraint firstAttribute="height" constant="40" id="Ihe-Oz-jn6"/>
-                                </constraints>
-                                <state key="normal" title="Play"/>
-                                <connections>
-                                    <action selector="playAction:" destination="BV1-FR-VrT" eventType="touchUpInside" id="Jwv-D3-UV3"/>
-                                </connections>
-                            </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l6t-Hc-qkA">
-                                <rect key="frame" x="275" y="527" width="80" height="40"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="Dtf-sM-HJ1"/>
-                                    <constraint firstAttribute="width" constant="80" id="FBR-Il-pwj"/>
-                                </constraints>
-                                <state key="normal" title="Next"/>
-                                <connections>
-                                    <action selector="nextAction:" destination="BV1-FR-VrT" eventType="touchUpInside" id="tEM-Cq-GUv"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Muw-en-SYF">
@@ -88,27 +54,39 @@
                                     <constraint firstAttribute="height" constant="40" id="nQ7-YF-9Kr"/>
                                     <constraint firstAttribute="width" constant="80" id="ycd-8c-IDJ"/>
                                 </constraints>
-                                <state key="normal" title="Tray"/>
+                                <state key="normal" title="Tray" backgroundImage="wooden_button">
+                                    <color key="titleColor" red="0.94283435510000002" green="1" blue="0.1962004597" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                </state>
                                 <connections>
                                     <action selector="toggleTray:" destination="BV1-FR-VrT" eventType="touchUpInside" id="AFw-Z6-5pm"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qmW-fN-Git">
+                                <rect key="frame" x="275" y="180" width="80" height="40"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="HxP-dH-k9o"/>
+                                    <constraint firstAttribute="height" constant="40" id="myN-W3-iqd"/>
+                                </constraints>
+                                <state key="normal" title="End Turn" backgroundImage="wooden_button">
+                                    <color key="titleColor" red="0.94283435510000002" green="1" blue="0.1962004597" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                </state>
+                                <connections>
+                                    <action selector="endAction:" destination="BV1-FR-VrT" eventType="touchUpInside" id="hMX-FG-IIi"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="ycm-Gh-jsr" firstAttribute="bottom" secondItem="S35-5l-9ez" secondAttribute="bottom" constant="40" id="1BY-tn-oj9"/>
                             <constraint firstItem="KeU-uc-mAD" firstAttribute="top" secondItem="ycm-Gh-jsr" secondAttribute="top" constant="40" id="4mi-Jd-PRr"/>
+                            <constraint firstItem="ycm-Gh-jsr" firstAttribute="trailing" secondItem="qmW-fN-Git" secondAttribute="trailing" constant="20" id="542-fJ-6YA"/>
                             <constraint firstItem="pks-cV-38a" firstAttribute="bottom" secondItem="ycm-Gh-jsr" secondAttribute="bottom" id="6ju-Om-Gp3"/>
-                            <constraint firstItem="ycm-Gh-jsr" firstAttribute="trailing" secondItem="l6t-Hc-qkA" secondAttribute="trailing" constant="20" id="9JO-j1-0ab"/>
-                            <constraint firstItem="KhI-w1-M5h" firstAttribute="centerX" secondItem="xmx-ew-7RG" secondAttribute="centerX" id="AV7-zr-7go"/>
                             <constraint firstItem="ycm-Gh-jsr" firstAttribute="trailing" secondItem="k9M-QH-mMl" secondAttribute="trailing" constant="20" id="Qjx-5z-Ubg"/>
                             <constraint firstItem="Muw-en-SYF" firstAttribute="top" secondItem="KeU-uc-mAD" secondAttribute="bottom" constant="20" id="VaL-cf-dbK"/>
-                            <constraint firstItem="k9M-QH-mMl" firstAttribute="top" secondItem="l6t-Hc-qkA" secondAttribute="bottom" constant="20" id="aum-59-nJb"/>
                             <constraint firstItem="pks-cV-38a" firstAttribute="leading" secondItem="ycm-Gh-jsr" secondAttribute="leading" id="cji-I7-d5s"/>
                             <constraint firstItem="ycm-Gh-jsr" firstAttribute="trailing" secondItem="Muw-en-SYF" secondAttribute="trailing" constant="20" id="efu-2e-px0"/>
+                            <constraint firstItem="qmW-fN-Git" firstAttribute="top" secondItem="Muw-en-SYF" secondAttribute="bottom" constant="20" id="gig-SW-hrV"/>
                             <constraint firstItem="ycm-Gh-jsr" firstAttribute="bottom" secondItem="k9M-QH-mMl" secondAttribute="bottom" constant="40" id="kdf-qx-bDW"/>
-                            <constraint firstItem="S35-5l-9ez" firstAttribute="leading" secondItem="ycm-Gh-jsr" secondAttribute="leading" constant="20" id="kr9-ew-VPd"/>
-                            <constraint firstItem="ycm-Gh-jsr" firstAttribute="bottom" secondItem="KhI-w1-M5h" secondAttribute="bottom" constant="40" id="nN4-zf-s2d"/>
                             <constraint firstItem="pks-cV-38a" firstAttribute="trailing" secondItem="ycm-Gh-jsr" secondAttribute="trailing" id="nh0-Sc-Wbj"/>
                             <constraint firstItem="pks-cV-38a" firstAttribute="top" secondItem="xmx-ew-7RG" secondAttribute="top" id="sbk-cw-krl"/>
                             <constraint firstItem="ycm-Gh-jsr" firstAttribute="trailing" secondItem="KeU-uc-mAD" secondAttribute="trailing" constant="20" id="xwB-ag-AqZ"/>
@@ -118,15 +96,14 @@
                     <connections>
                         <outlet property="attackButton" destination="k9M-QH-mMl" id="EOe-yQ-wcd"/>
                         <outlet property="connectButton" destination="KeU-uc-mAD" id="UJG-PL-fTA"/>
-                        <outlet property="drawButton" destination="KhI-w1-M5h" id="kVL-4x-7Ae"/>
-                        <outlet property="nextButton" destination="l6t-Hc-qkA" id="yxB-TK-ZE0"/>
-                        <outlet property="playButton" destination="S35-5l-9ez" id="RIv-MO-qW0"/>
+                        <outlet property="endButton" destination="qmW-fN-Git" id="pmA-tb-JwH"/>
                         <outlet property="sceneView" destination="pks-cV-38a" id="odj-Ur-9yV"/>
+                        <segue destination="SKJ-ff-KJ1" kind="show" identifier="BackToMainMenu" id="4as-Nr-Say"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1239" y="32"/>
+            <point key="canvasLocation" x="1237.5999999999999" y="31.934032983508249"/>
         </scene>
         <!--Menu View Controller-->
         <scene sceneID="zco-FN-Qjb">
@@ -247,7 +224,7 @@
                                         </constraints>
                                         <state key="normal" title="Exit"/>
                                         <connections>
-                                            <segue destination="SKJ-ff-KJ1" kind="show" identifier="BackToMainMenu" id="2lw-un-wve"/>
+                                            <segue destination="SKJ-ff-KJ1" kind="show" identifier="ExitGameRoom" id="2lw-un-wve"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DeL-nS-qcz">
@@ -309,5 +286,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="0af-cO-gKk"/>
+        <segue reference="4as-Nr-Say"/>
     </inferredMetricsTieBreakers>
 </document>

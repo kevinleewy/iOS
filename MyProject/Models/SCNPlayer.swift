@@ -31,7 +31,7 @@ class SCNPlayer: SCNNode {
         
         self.id = config["id"] as! String
         let handConf = config["hand"] as! [Int]
-        let fieldConf = config["field"] as! [Int]
+        let fieldConf = config["field"] as! [Any]
         self.life = config["life"] as! Int
         self.deckSize = config["deck"] as! Int
         
@@ -40,7 +40,7 @@ class SCNPlayer: SCNNode {
         self.hand  = SCNHand(config: handConf, scene: scene)
         self.sceneLife  = SCNLife(config: self.life, scene: scene)
         
-        self.playerStatsNode = SKPlayerStats(life: self.life, deck: deckSize)
+        self.playerStatsNode = SKPlayerStats(id: self.id, life: self.life, deck: deckSize)
         
         super.init()
         self.position = SCNVector3(x: 0.0, y: 0.0, z: depth)
@@ -107,7 +107,7 @@ class SCNPlayer: SCNNode {
             default:
                 id = "ivysaur"
         }
-        let creature = SCNCreature(name: "Ally\(fieldSlot)", id: id, scene: scene)
+        let creature = SCNCreature(name: "\(self.id)\(fieldSlot)", id: id, scene: scene)
         if !field.addCreature(creature: creature, slot: fieldSlot, playSound: true) {
             NSLog("Failed to add Ally\(fieldSlot)")
         }

@@ -114,10 +114,11 @@ class GameRoomViewController: UIViewController,UITableViewDelegate,UITableViewDa
         
         self.socket.on("appError") {data, ack in
             let err = data[0] as! [Any]
-            let errorCode = err[0] as! Int
-            let errorMsg = err[1] as! String
-            displayError(message: errorMsg)
-            print("Error \(errorCode.description): \(errorMsg)")
+            if let errorCode = err[0] as? Int,
+                let errorMsg = err[1] as? String {
+                displayError(message: errorMsg)
+                print("Error \(errorCode.description): \(errorMsg)")
+            }
         }
         
         self.socket.on("gameRoomRetrieved") {data, ack in
@@ -212,7 +213,7 @@ class GameRoomViewController: UIViewController,UITableViewDelegate,UITableViewDa
     // MARK: Segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "BackToMainMenu" {
+        if segue.identifier == "ExitGameRoom" {
             let destinationVC = segue.destination as! MenuViewController
             destinationVC.playerId = self.playerId
             destinationVC.host = self.host

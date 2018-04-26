@@ -29,7 +29,6 @@ class MenuViewController: UIViewController {
         } else {
             promptForInfo()
         }
-        
     }
 
     func promptForInfo(){
@@ -47,7 +46,7 @@ class MenuViewController: UIViewController {
             alert.addTextField { (textField) in
                 textField.text = "192.168.1.110"  //home
                 //textField.text = "192.168.17.221"   //work
-                //textField.text = "10.30.134.101" //stanford
+                //textField.text = "10.30.135.110" //stanford
             }
             
             //Grab the value from the text field, and print it when the user clicks OK.

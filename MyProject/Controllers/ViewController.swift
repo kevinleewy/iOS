@@ -46,19 +46,18 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     @IBOutlet weak var connectButton: UIButton!
     
     
-    @IBOutlet weak var playButton: UIButton!
+    @IBOutlet weak var endButton: UIButton!
     
-    @IBOutlet weak var drawButton: UIButton!
     
     @IBOutlet weak var attackButton: UIButton!
-    
-    @IBOutlet weak var nextButton: UIButton!
+
     
     @IBOutlet var sceneView: ARSCNView!
     let configuration = ARWorldTrackingConfiguration()
     let trayLauncher = TrayLauncher()
     var isWorldSetUp = false
-    var turn = true;
+    var gameEnded = false
+    var isMyTurn = false
     
     var playerId: String?
     
@@ -70,7 +69,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var socket: SocketIOClient!
     var host: String = ""
     
-    var DEBUG = true
+    var DEBUG = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,12 +82,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Set up spotlight attached to camera
         attachSpotLight()
-        
-        // Establish connection with server
-        //connectToServer()
-        
-        // Pick a player
-        //self.selectPlayer()
         
         // Set Up Socket Events
         self.setSocketEvents()
@@ -111,63 +104,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self.sceneView.pointOfView?.addChildNode(spotNode)
     }
     
-    func selectPlayer(){
-        DispatchQueue.main.async {
-
-            let alert = UIAlertController(title: "Player", message: "Select one", preferredStyle: .alert)
-            
-            alert.addAction(UIAlertAction(title: "Player 1", style: .default, handler: { [weak alert] (_) in
-                self.playerId = self.playerId
-            }))
-            
-            alert.addAction(UIAlertAction(title: "Player 2", style: .default, handler: { [weak alert] (_) in
-                self.playerId = "Player2"
-            }))
-            
-            UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
-        }
-    }
-    
-    func connectToServer() {
-        
-        DispatchQueue.main.async {
-            //1. Create the alert controller.
-            let alert = UIAlertController(title: "Connecting to Server", message: "Input IP of server", preferredStyle: .alert)
-            
-            //2. Add the text field. You can configure it however you need.
-            alert.addTextField { (textField) in
-                //textField.text = "192.168.1.110"  //home
-                textField.text = "192.168.17.221"   //work
-                //textField.text = "10.30.151.51" //stanford
-            }
-            
-            // 3. Grab the value from the text field, and print it when the user clicks OK.
-            alert.addAction(UIAlertAction(title: "Player 1", style: .default, handler: { [weak alert] (_) in
-                let textField = alert?.textFields![0] // Force unwrapping because we know it exists.
-                self.host = (textField?.text)!
-                self.playerId = "Player1"
-                self.initSocket()   //initialize sockets
-            }))
-            
-            alert.addAction(UIAlertAction(title: "Player 2", style: .default, handler: { [weak alert] (_) in
-                let textField = alert?.textFields![0] // Force unwrapping because we know it exists.
-                self.host = (textField?.text)!
-                self.playerId = "Player2"
-                self.initSocket()   //initialize sockets
-            }))
-            
-            // 4. Present the alert.
-            UIApplication.topViewController()?.present(alert, animated: true, completion: nil)
-        }
-    }
-    
-    func initSocket(){
-        self.manager = SocketManager(socketURL: URL(string: "http://\(self.host):8080")!,config: [.log(false),.connectParams(["token": playerId!])])
-        self.socket = manager?.defaultSocket
-        self.setSocketEvents()
-        self.socket.connect()
-    }
-    
     func setUpWorld(config: [String: Any]){
         
         debugprint("Setting up world")
@@ -186,6 +122,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
         let turnPlayer = config["turnPlayer"] as! String
         
+        self.isMyTurn = (turnPlayer == self.playerId)
+        
         
         // Create a new scene
         let scene = SCNScene()
@@ -200,7 +138,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self.player1 = SCNPlayer(config: p1conf, scene: scene, depth: 0.0)
         scene.rootNode.addChildNode(self.player1!)
         let p1Stats = self.player1?.getStats()
-        p1Stats?.position = CGPoint(x: self.spriteScene.size.width - 80, y: 200)
+        p1Stats?.position = CGPoint(x: self.spriteScene.size.width - 80, y: 300)
         self.spriteScene.addChild(p1Stats!)
         
         self.player2 = SCNPlayer(config: p2conf, scene: scene, depth: -8.0)    //8 meters deep
@@ -211,40 +149,32 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         self.spriteScene.addChild(p2Stats!)
         
         //Configure buttons
-        self.configureButtons(turnPlayer == self.playerId)
+        self.configureButtons()
+        
+        //Configure tray
+        let handConf = p1conf["hand"] as! [Int]
+        self.trayLauncher.handScene.loadHand(cardIds: handConf, socket: self.socket)
 
     }
     
-    /* @param - enable: Bool
-     * true : make all buttons visible, but disable invalid buttons
-     * false: hide all buttons
-     */
-    func configureButtons(_ enable: Bool){
-        if enable {
-            self.playButton.isHidden   = false
-            self.drawButton.isHidden   = false
+    func configureButtons(){
+        if isMyTurn {
+            self.endButton.isHidden = false
             self.attackButton.isHidden = false
-            self.nextButton.isHidden   = false
-            if self.player1!.getHand().isEmpty() {
-                self.playButton.isEnabled = false
-            } else {
-                self.playButton.isEnabled = true
-            }
             if self.player1!.getField().hasCreatures() {
                 self.attackButton.isEnabled = true
             } else {
                 self.attackButton.isEnabled = false
             }
         } else {
-            self.playButton.isHidden   = true
-            self.drawButton.isHidden   = true
+            self.endButton.isHidden = true
             self.attackButton.isHidden = true
-            self.nextButton.isHidden   = true
         }
     }
     
     func restartSession() {
         self.sceneView.overlaySKScene = nil
+        self.trayLauncher.handScene.destroyHand()
         self.sceneView.session.pause()
         self.sceneView.scene.rootNode.enumerateChildNodes { (node, _) in
             node.removeFromParentNode()
@@ -254,6 +184,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     @IBAction func connectAction(_ sender: Any) {
+        if gameEnded {
+            debugprint("Game ended. Leaving game room...")
+            performSegue(withIdentifier: "BackToMainMenu", sender: nil)
+        }
         if isWorldSetUp {
             debugprint("Leaving game")
             self.socket.emit("leaveGame",[])
@@ -270,14 +204,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         trayLauncher.toggleTray()
     }
     
-    @IBAction func playAction(_ sender: Any) {
-        debugprint("Playing a card")
-        self.socket.emit("actionSelect", ["action":"play", "handCardSlot": 0])
-    }
-    
-    @IBAction func drawAction(_ sender: Any) {
-        debugprint("Drawing a card")
-        self.socket.emit("actionSelect", ["action":"draw"])
+    @IBAction func endAction(_ sender: Any) {
+        self.socket.emit("actionSelect", ["action":"endTurn"])
     }
     
     @IBAction func AttackAction(_ sender: Any) {
@@ -300,11 +228,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             debugprint(params.description)
             self.socket.emit("actionSelect", params)
         }
-    }
-    
-    @IBAction func nextAction(_ sender: Any) {
-        NSLog("Requesting phase change")
-        self.socket.emit("actionSelect", ["action":"nextPhase"])
     }
 
     
@@ -335,10 +258,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
         self.socket.on("appError") {data, ack in
             let err = data[0] as! [Any]
-            let errorCode = err[0] as! Int
-            let errorMsg = err[1] as! String
-            displayError(message: errorMsg)
-            print("Error \(errorCode.description): \(errorMsg)")
+            if let errorCode = err[0] as? Int,
+                let errorMsg = err[1] as? String {
+                displayError(message: errorMsg)
+                print("Error \(errorCode.description): \(errorMsg)")
+            }
         }
         
         self.socket.on("joinedGame") {data, ack in
@@ -352,14 +276,25 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             }
         }
         
+        self.socket.on("gameEnded") {data, ack in
+            self.debugprint(data.description);
+            self.debugprint("Game Ended")
+            
+            if let winnerId = data[0] as? String {
+                self.spriteScene.announcement = "Game ended. \(winnerId) won."
+                self.gameEnded = true
+                self.connectButton.setTitle("Leave", for: .normal)
+            }
+        }
+        
         self.socket.on("actionResponse") {data, ack in
             self.debugprint(data.description);
-            let dataJSON = data[0] as! [[String:Any]]
-            for eventObj in dataJSON {
-                let playerId = eventObj["playerId"] as! String
-                let event = eventObj["event"] as! String
-                self.spriteScene.announcement = "\(playerId) \(event)"
-                switch event {
+            let eventObj = data[0] as! [String:Any]
+
+            let playerId = eventObj["playerId"] as! String
+            let event = eventObj["event"] as! String
+            self.spriteScene.announcement = "\(playerId) \(event)"
+            switch event {
                 case "draw"   : self.drawHandler(playerId, eventObj["newCard"] as! Int)
                 case "play"   : self.playHandler(playerId, eventObj["cardSlot"] as! Int)
                 case "summon" : self.summonHandler(
@@ -384,12 +319,21 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                         eventObj["targetPlayerId"] as! String,
                         eventObj["damageDealt"] as! Int
                     )
+                case "startTurn" :
+                    if playerId == self.playerId {
+                        self.isMyTurn = true
+                    }
                 case "endTurn" :
-                    self.configureButtons(!(playerId == self.playerId))
+                    if playerId == self.playerId {
+                        self.isMyTurn = false
+                    }
+                case "eliminated" : break
+                
                 default :
                     self.debugprint("Received \(event) event")
-                }
             }
+            self.configureButtons()
+
         }
         
     }
@@ -399,7 +343,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func drawHandler(_ playerId:String, _ cardId:Int) {
         if playerId == self.playerId {
             self.player1?.draw(cardId)
-            self.configureButtons(true)
+            self.trayLauncher.handScene.addCard(cardId)
         } else {
             self.player2?.draw(cardId)
         }
@@ -410,10 +354,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         //Remove card from hand
         if playerId == self.playerId {
             self.player1?.playCard(handSlot: handSlot)
+            self.trayLauncher.handScene.discard(handSlot)
         } else {
             self.player2?.playCard(handSlot: handSlot)
         }
-        self.configureButtons(playerId == self.playerId)
     }
     
     func summonHandler(_ playerId:String, _ fieldSlot:Int, _ cardId:Int) {
@@ -423,7 +367,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         } else {
             self.player2?.summonCreature(cardId: cardId,fieldSlot: fieldSlot)
         }
-        self.configureButtons(playerId == self.playerId)
     }
     
     func healHandler(_ playerId:String, _ amount:Int) {
@@ -458,7 +401,16 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         }
     }
     
+    // MARK: Segue
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "BackToMainMenu" {
+            let destinationVC = segue.destination as! MenuViewController
+            destinationVC.playerId = self.playerId!
+            destinationVC.host = self.host
+            destinationVC.loggedIn = true
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

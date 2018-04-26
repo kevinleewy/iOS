@@ -8,6 +8,12 @@
 
 import ARKit
 
+enum Phase :Int {
+    case notMyTurn,
+    drawPhase,
+    mainPhase
+}
+
 extension BinaryInteger {
     var degreesToRadians: CGFloat { return CGFloat(Int(self)) * .pi / 180 }
 }
