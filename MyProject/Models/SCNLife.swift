@@ -11,13 +11,13 @@ import ARKit
 class SCNLife: SCNNode {
     
     private var life: Int
-    private var scene: SCNScene
+    private var scene: ARSCNView
     private var icons: [SCNNode]
     
     static let INITIAL_LIFE: Int = 3
     static let ICON_GAP: Float = 0.6 //40cm
     
-    init(config: Int, scene: SCNScene) {
+    init(config: Int, scene: ARSCNView) {
         self.scene = scene
         self.life = config
         

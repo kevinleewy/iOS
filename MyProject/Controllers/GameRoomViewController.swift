@@ -44,6 +44,11 @@ class GameRoomViewController: UIViewController,UITableViewDelegate,UITableViewDa
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    
     func setUpTableViews() {
         self.playersView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         self.playersView.dataSource = self

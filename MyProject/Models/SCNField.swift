@@ -10,12 +10,12 @@ import ARKit
 
 class SCNField: SCNNode {
     
-    private var scene: SCNScene
+    private var scene: ARSCNView
     private var creatures: [SCNCreature?]
     static let MAX_CREATURES: Int = 5
     static let CREATURE_CENTROID_GAP: Float = 2.0
     
-    init(config: [Any], scene: SCNScene) {
+    init(config: [Any], scene: ARSCNView) {
 
         self.scene = scene
         self.creatures = [SCNCreature?](repeating: nil, count: SCNField.MAX_CREATURES)
@@ -26,7 +26,9 @@ class SCNField: SCNNode {
                 continue
             }
             if let creatureDataObj = creatureData as? [String:Any],
-                let creatureId = creatureDataObj["id"] as? Int {
+                let creatureId = creatureDataObj["id"] as? Int,
+                let strength = creatureDataObj["strength"] as? Int,
+                let life = creatureDataObj["life"] as? Int{
                 var id: String
                 
                 switch creatureId {
@@ -38,7 +40,7 @@ class SCNField: SCNNode {
                         id = "ivysaur"
                 }
 
-                let creature = SCNCreature(name: "Ally\(slot)", id: id, scene: scene)
+                let creature = SCNCreature(name: "Ally\(slot)", id: id, strength: strength, life:life, scene: scene)
                 if !self.addCreature(creature: creature, slot: slot, playSound: false) {
                     NSLog("Failed to add Ally\(slot)")
                 }

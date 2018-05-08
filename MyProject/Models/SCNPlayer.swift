@@ -11,7 +11,7 @@ import ARKit
 class SCNPlayer: SCNNode {
     
     private var id: String
-    private var scene: SCNScene
+    private var scene: ARSCNView
     private var field: SCNField
     private var hand : SCNHand
     private var sceneLife : SCNLife
@@ -27,7 +27,7 @@ class SCNPlayer: SCNNode {
     }
     private var playerStatsNode: SKPlayerStats
     
-    init(config: [String: Any], scene: SCNScene, depth: Float) {
+    init(config: [String: Any], scene: ARSCNView, depth: Float) {
         
         self.id = config["id"] as! String
         let handConf = config["hand"] as! [Int]
@@ -107,7 +107,7 @@ class SCNPlayer: SCNNode {
             default:
                 id = "ivysaur"
         }
-        let creature = SCNCreature(name: "\(self.id)\(fieldSlot)", id: id, scene: scene)
+        let creature = SCNCreature(name: "\(self.id)\(fieldSlot)", id: id, strength: 1, life: 1, scene: scene)
         if !field.addCreature(creature: creature, slot: fieldSlot, playSound: true) {
             NSLog("Failed to add Ally\(fieldSlot)")
         }

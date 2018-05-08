@@ -7,28 +7,49 @@
 //
 
 import UIKit
+import AWSCognitoIdentityProvider
 
 class MenuViewController: UIViewController {
 
+    // MARK: AWS variables
+    var response: AWSCognitoIdentityUserGetDetailsResponse?
+    var user: AWSCognitoIdentityUser?
+    var pool: AWSCognitoIdentityUserPool?
+    
     // MARK: View Elements
     @IBOutlet weak var menuButton0: UIButton!
     @IBOutlet weak var menuButton1: UIButton!
     
     // MARK: ViewController variables
     var playerId: String = "Player"
-    var host: String = "localhost"
+    var host: String = GameServerIP
     var roomExists: Bool = false
     var loggedIn: Bool = false
     var language: String = "EN"
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.pool = AWSCognitoIdentityUserPool(forKey: AWSCognitoUserPoolsSignInProviderKey)
+        if (self.user == nil) {
+            self.user = self.pool?.currentUser()
+        }
+        self.refresh()
         
-        if loggedIn {
+        /*if loggedIn {
             self.checkIfRoomExists()
         } else {
             promptForInfo()
-        }
+        }*/
+    }
+    
+    /*override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setToolbarHidden(true, animated: true)
+    }*/
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
 
     func promptForInfo(){
@@ -44,9 +65,9 @@ class MenuViewController: UIViewController {
             
             //Add host IP text field
             alert.addTextField { (textField) in
-                textField.text = "192.168.1.110"  //home
+                //textField.text = "192.168.1.110"  //home
                 //textField.text = "192.168.17.221"   //work
-                //textField.text = "10.30.135.110" //stanford
+                textField.text = "10.30.135.110" //stanford
             }
             
             //Grab the value from the text field, and print it when the user clicks OK.
@@ -234,6 +255,18 @@ class MenuViewController: UIViewController {
         }.resume()
     }
     
+    func refresh() {
+        self.user?.getDetails().continueOnSuccessWith { (task) -> AnyObject? in
+            DispatchQueue.main.async(execute: {
+                print(task.description)
+                self.response = task.result
+                self.playerId = (self.user?.username)!
+                self.checkIfRoomExists()
+            })
+            return nil
+        }
+    }
+    
     // MARK: Button Action Handlers
     
     
@@ -258,9 +291,13 @@ class MenuViewController: UIViewController {
     }
     
     @IBAction func menuButton2Action(_ sender: Any) {
-        self.promptForInfo()
+        //self.promptForInfo()
     }
     
+    @IBAction func signOutAction(_ sender: Any) {
+        self.user?.signOut()
+        self.refresh()
+    }
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
 
         return self.roomExists

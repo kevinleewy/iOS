@@ -10,11 +10,11 @@ import ARKit
 
 class SCNHand: SCNNode {
     
-    private var scene: SCNScene
+    private var scene: ARSCNView
     private var hand: [SCNCard?]
     static let HAND_WIDTH: Float = 0.4 //40cm
     
-    init(config: [Int], scene: SCNScene) {
+    init(config: [Int], scene: ARSCNView) {
 
         self.scene = scene
         self.hand = []
@@ -87,6 +87,15 @@ class SCNHand: SCNNode {
     
     public func isEmpty() -> Bool {
         return hand.count == 0
+    }
+    
+    public func getSlotFor(card : SCNCard) -> Int? {
+        for (i, cardInHand) in hand.enumerated() {
+            if card == cardInHand {
+                return i
+            }
+        }
+        return nil
     }
     
 }

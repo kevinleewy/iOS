@@ -14,6 +14,12 @@ enum Phase :Int {
     mainPhase
 }
 
+enum AttackingState :Int {
+    case notAttacking,
+    selectAttacker,
+    selectTarget
+}
+
 extension BinaryInteger {
     var degreesToRadians: CGFloat { return CGFloat(Int(self)) * .pi / 180 }
 }
@@ -21,6 +27,20 @@ extension BinaryInteger {
 extension FloatingPoint {
     var degreesToRadians: Self { return self * .pi / 180 }
     var radiansToDegrees: Self { return self * 180 / .pi }
+}
+
+extension SCNNode {
+    func getSCNCreature(depth: Int) -> SCNCreature? {
+        if depth < 0 {
+            return nil
+        }
+        
+        if let creature = self as? SCNCreature {
+            return creature
+        }
+        
+        return self.parent?.getSCNCreature(depth: depth - 1)
+    }
 }
 
 /*

@@ -69,6 +69,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var socket: SocketIOClient!
     var host: String = ""
     
+    var selectedCard : SCNCard? = nil
+    var attackingState : AttackingState = .notAttacking
+    var attacker : SCNCreature?
+    var attackTarget : SCNCreature?
+    
     var DEBUG = false
 
     override func viewDidLoad() {
@@ -131,17 +136,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Set the scene to the view
         sceneView.scene = scene
         
+        // Add Tap Gesture Recognizer
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        self.sceneView.addGestureRecognizer(tapGesture)
+        
+        
         // Load Overlay Scene
         self.spriteScene = OverlayScene(size: self.view.bounds.size)
         self.sceneView.overlaySKScene = self.spriteScene
         
-        self.player1 = SCNPlayer(config: p1conf, scene: scene, depth: 0.0)
+        self.player1 = SCNPlayer(config: p1conf, scene: self.sceneView, depth: 0.0)
         scene.rootNode.addChildNode(self.player1!)
         let p1Stats = self.player1?.getStats()
         p1Stats?.position = CGPoint(x: self.spriteScene.size.width - 80, y: 300)
         self.spriteScene.addChild(p1Stats!)
         
-        self.player2 = SCNPlayer(config: p2conf, scene: scene, depth: -8.0)    //8 meters deep
+        self.player2 = SCNPlayer(config: p2conf, scene: self.sceneView, depth: -8.0)    //8 meters deep
         self.player2?.eulerAngles = SCNVector3(0.degreesToRadians, 180.degreesToRadians, 0.degreesToRadians)
         scene.rootNode.addChildNode(self.player2!)
         let p2Stats = self.player2?.getStats()
@@ -160,11 +170,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func configureButtons(){
         if isMyTurn {
             self.endButton.isHidden = false
-            self.attackButton.isHidden = false
             if self.player1!.getField().hasCreatures() {
-                self.attackButton.isEnabled = true
+                self.attackButton.isHidden = false
             } else {
-                self.attackButton.isEnabled = false
+                self.attackButton.isEnabled = true
             }
         } else {
             self.endButton.isHidden = true
@@ -210,7 +219,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     @IBAction func AttackAction(_ sender: Any) {
         
-        if self.player2!.getField().hasCreatures() {
+        if attackingState == .notAttacking {
+            attackingState = .selectAttacker
+        }
+        
+        /*if self.player2!.getField().hasCreatures() {
             let params = [
                 "action" : "attack",
                 "attackerSlot" : self.player1!.getField().getLeftMostCreature()!.slot,
@@ -225,6 +238,77 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 "attackerSlot" : self.player1!.getField().getLeftMostCreature()!.slot,
                 "targetPlayerId" : self.player2!.getId(),
             ] as [String : Any]
+            debugprint(params.description)
+            self.socket.emit("actionSelect", params)
+        }*/
+    }
+
+    // MARK: Tap Handlers
+    
+    @objc func handleTap(_ gestureRecognize: UIGestureRecognizer) {
+        
+        // check what nodes are tapped
+        let p = gestureRecognize.location(in: self.sceneView)
+        let hitResults = self.sceneView.hitTest(p, options: [:])
+        
+        // check that we clicked on at least one object
+        if hitResults.count > 0 {
+            // retrieved the first clicked object
+            let result: SCNHitTestResult = hitResults[0]
+            
+            if let card = result.node as? SCNCard {
+                self.cardTappedHandler(card)
+            } else if let creature = result.node.getSCNCreature(depth: 2) {
+                self.creatureTappedHandler(creature)
+            } else {
+                print(result.node.debugDescription)
+            }
+            
+            // result.node is the node that the user tapped on
+            // perform any actions you want on it
+            
+        }
+    }
+    
+    func cardTappedHandler(_ card: SCNCard){
+        
+        //If tapping on same card for a second time
+        if self.selectedCard == card {
+            self.selectedCard = nil
+            if let slot = self.player1?.getHand().getSlotFor(card: card) {
+                self.socket.emit("actionSelect", ["action":"play", "handCardSlot": slot])
+            }
+        } else {
+            self.selectedCard = card
+        }
+    }
+    
+    func creatureTappedHandler(_ creature: SCNCreature){
+        //print(creature.description)
+        //print("Tapped on creature")
+        if attackingState == .selectAttacker && creature.parent?.parent == self.player1 {
+            if self.player2!.getField().hasCreatures() {
+                self.attacker = creature
+                attackingState = .selectTarget
+            } else {
+                let params = [
+                    "action" : "directAttack",
+                    "attackerSlot" : creature.slot,
+                    "targetPlayerId" : self.player2!.getId(),
+                    ] as [String : Any]
+                debugprint(params.description)
+                attackingState = .notAttacking
+                self.socket.emit("actionSelect", params)
+            }
+        } else if attackingState == .selectTarget {
+            self.attackTarget = creature
+            attackingState = .notAttacking
+            let params = [
+                "action" : "attack",
+                "attackerSlot" : self.attacker!.slot,
+                "targetPlayerId" : self.player2!.getId(),
+                "defenderSlot" : creature.slot
+                ] as [String : Any]
             debugprint(params.description)
             self.socket.emit("actionSelect", params)
         }
@@ -414,6 +498,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
         
         // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()

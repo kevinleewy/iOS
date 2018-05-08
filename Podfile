@@ -7,6 +7,8 @@ target 'MyProject' do
 
   # Pods for MyProject
   pod 'Socket.IO-Client-Swift', '~> 13.0.0'
+  pod 'AWSCore', '~> 2.6.0'
+  pod 'AWSCognitoIdentityProvider', '~> 2.6.0'
 
   target 'MyProjectTests' do
     inherit! :search_paths

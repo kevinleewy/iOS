@@ -1,20 +1,33 @@
 PODS:
+  - AWSCognitoIdentityProvider (2.6.14):
+    - AWSCognitoIdentityProviderASF (= 1.0.1)
+    - AWSCore (= 2.6.14)
+  - AWSCognitoIdentityProviderASF (1.0.1)
+  - AWSCore (2.6.14)
   - Socket.IO-Client-Swift (13.0.1):
     - Starscream (~> 3.0.2)
   - Starscream (3.0.5)
 
 DEPENDENCIES:
+  - AWSCognitoIdentityProvider (~> 2.6.0)
+  - AWSCore (~> 2.6.0)
   - Socket.IO-Client-Swift (~> 13.0.0)
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
+    - AWSCognitoIdentityProvider
+    - AWSCognitoIdentityProviderASF
+    - AWSCore
     - Socket.IO-Client-Swift
     - Starscream
 
 SPEC CHECKSUMS:
+  AWSCognitoIdentityProvider: 5055dd6a04040582191b0f3a80723e67fc55eaf4
+  AWSCognitoIdentityProviderASF: f94f1a502e72ef3d0a1de93e10bf7a79c8698118
+  AWSCore: 8c883c2623d314dd82cca3809527784e1d1a02e5
   Socket.IO-Client-Swift: 7055c89b7a9926b343194c4cac75998329c4a95a
   Starscream: faf918b2f2eff7d5dd21180646bf015a669673bd
 
-PODFILE CHECKSUM: d80e424b3775b095d6a11ba62c90c7764499ef2b
+PODFILE CHECKSUM: f27d6d0f1cd90735c4f5beb9a6227f7a64c96dbe
 
 COCOAPODS: 1.5.0

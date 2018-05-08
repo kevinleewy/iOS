@@ -12,7 +12,7 @@ class SCNCreature: SCNNode {
     
     let summonAction = SCNAction.group([SCNAction.fadeIn(duration: 2), SCNAction.move(by: SCNVector3(x: 0, y: 0.2, z: 0), duration: 2)])
     
-    var scene: SCNScene     //main scene
+    var scene: ARSCNView     //main scene
     var creatureScene: SCNScene //creature scene
     var slot: Int = -1
     var attackParticles: SCNNode
@@ -20,21 +20,30 @@ class SCNCreature: SCNNode {
     var soundFilename: String
     var originalScale: Float
     var id: String
+    var strength: Int
+    var life: Int
+    var model: SCNNode //model node
+    var creatureStatsNode: SCNCreatureStats
     
     //Dragon specific
     var idlePlayer: SCNAnimationPlayer?
     var agroPlayer: SCNAnimationPlayer?
     
-    init(name: String, id: String, scene: SCNScene) {
+    init(name: String, id: String, strength: Int, life: Int ,scene: ARSCNView) {
         
         //Load data from JSON
         let jsonResult = JSONData(filename: "json/\(id)").getData()
         self.daeFilename = jsonResult?["scene"] as! String
         
         self.id = id
+        self.strength = strength
+        self.life = life
+        self.creatureStatsNode = SCNCreatureStats()
+        self.creatureStatsNode.constraints?.append(SCNLookAtConstraint(target: scene.pointOfView))
         
         self.scene = scene
         self.creatureScene = SCNScene(named: daeFilename)!
+        self.model = SCNNode()
         self.attackParticles = SCNNode()
         self.attackParticles.geometry = SCNBox(width: 0.3, height: 0.3, length: 0.3, chamferRadius: 0.3)
         self.attackParticles.geometry?.firstMaterial?.diffuse.contents = UIColor.green
@@ -73,11 +82,13 @@ class SCNCreature: SCNNode {
         }
         
         for childNode in self.creatureScene.rootNode.childNodes {
-            self.addChildNode(childNode as SCNNode)
+            self.model.addChildNode(childNode as SCNNode)
         }
         
-        self.scale = SCNVector3(x: self.originalScale, y: self.originalScale, z: self.originalScale)
-        self.opacity = 0.0
+        self.model.scale = SCNVector3(x: self.originalScale, y: self.originalScale, z: self.originalScale)
+        self.model.opacity = 0.0
+        self.addChildNode(self.model)
+        self.addChildNode(self.creatureStatsNode)
         
     }
     
@@ -88,12 +99,12 @@ class SCNCreature: SCNNode {
     func summon(playSound: Bool){
         //self.runAction(summonAction)
         if playSound {
-            self.runAction(SCNAction.group([
+            self.model.runAction(SCNAction.group([
                 summonAction,
                 SCNAction.playAudio(SCNAudioSource(fileNamed: self.soundFilename)!, waitForCompletion: false)
             ]))
         } else {
-            self.runAction(summonAction)
+            self.model.runAction(summonAction)
         }
 
         //let anim = SCNAnimation(contentsOf: URL(fileURLWithPath: self.daeFilename))
@@ -122,7 +133,7 @@ class SCNCreature: SCNNode {
         let targetTransform = target.worldTransform
         let targetPosition = SCNVector3(targetTransform.m41, targetTransform.m42+0.3, targetTransform.m43)
         
-        self.scene.rootNode.addChildNode(newAttackParticles)
+        self.scene.scene.rootNode.addChildNode(newAttackParticles)
         
         if self.id == "dragon" {
             self.runAction(SCNAction.sequence([
@@ -150,15 +161,15 @@ class SCNCreature: SCNNode {
             destroyedAction = SCNAction.sequence([
                 SCNAction.fadeOut(duration: 1.0),
                 SCNAction.run({node in
-                    let creatureNode = node as! SCNCreature
-                    let field = node.parent as! SCNField
+                    let creatureNode = node.parent as! SCNCreature
+                    let field = creatureNode.parent as! SCNField
                     _ = field.removeCreature(slot: creatureNode.slot)
                 })
             ])
         }
         
         
-        target.runAction(SCNAction.sequence([
+        target.model.runAction(SCNAction.sequence([
             SCNAction.wait(duration: 2.5),
             SCNAction.rotateBy(x: 0, y: 360.degreesToRadians, z: 0, duration: 0.5),
             destroyedAction
@@ -172,7 +183,7 @@ class SCNCreature: SCNNode {
         let targetTransform = target.worldTransform
         let targetPosition = SCNVector3(targetTransform.m41, targetTransform.m42, targetTransform.m43)
         
-        self.scene.rootNode.addChildNode(newAttackParticles)
+        self.scene.scene.rootNode.addChildNode(newAttackParticles)
         newAttackParticles.runAction(SCNAction.sequence([
             SCNAction.fadeIn(duration: 0.5),
             SCNAction.move(to: targetPosition, duration: 2),

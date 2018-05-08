@@ -15,7 +15,6 @@
 		3D155D32206F225E0097B508 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3D155D30206F225E0097B508 /* LaunchScreen.storyboard */; };
 		3D155D3D206F225E0097B508 /* MyProjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D155D3C206F225E0097B508 /* MyProjectTests.swift */; };
 		3D155D48206F225F0097B508 /* MyProjectUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D155D47206F225F0097B508 /* MyProjectUITests.swift */; };
-		3D155D56206F2FF90097B508 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D155D55206F2FF90097B508 /* GameScene.swift */; };
 		3D155D94206FFF5A0097B508 /* SCNCreature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D155D93206FFF5A0097B508 /* SCNCreature.swift */; };
 		3D155D9620705E7B0097B508 /* SCNCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D155D9520705E7B0097B508 /* SCNCard.swift */; };
 		3D155D9820706A4A0097B508 /* Anchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D155D9720706A4A0097B508 /* Anchor.swift */; };
@@ -28,6 +27,17 @@
 		3D55618E208AAACA00B67467 /* GameRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D55618D208AAACA00B67467 /* GameRoomViewController.swift */; };
 		3D55619020903D0B00B67467 /* SKHand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D55618F20903D0B00B67467 /* SKHand.swift */; };
 		3D55619220903EDB00B67467 /* SKCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D55619120903EDB00B67467 /* SKCard.swift */; };
+		3D5561942093D63900B67467 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5561932093D63900B67467 /* Constants.swift */; };
+		3D5561AD2093E46D00B67467 /* UserDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5561A52093E46C00B67467 /* UserDetailTableViewController.swift */; };
+		3D5561AE2093E46D00B67467 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5561A62093E46C00B67467 /* ForgotPasswordViewController.swift */; };
+		3D5561AF2093E46D00B67467 /* ConfirmForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5561A72093E46C00B67467 /* ConfirmForgotPasswordViewController.swift */; };
+		3D5561B02093E46D00B67467 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5561A82093E46C00B67467 /* SignInViewController.swift */; };
+		3D5561B12093E46D00B67467 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5561A92093E46C00B67467 /* SignUpViewController.swift */; };
+		3D5561B22093E46D00B67467 /* MFAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5561AA2093E46D00B67467 /* MFAViewController.swift */; };
+		3D5561B32093E46D00B67467 /* ConfirmSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5561AB2093E46D00B67467 /* ConfirmSignUpViewController.swift */; };
+		3D5561B42093E46D00B67467 /* DevicesDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5561AC2093E46D00B67467 /* DevicesDetailTableViewController.swift */; };
+		3D5561B72093F4BB00B67467 /* MFAViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3D5561B62093F4BB00B67467 /* MFAViewController.xib */; };
+		3D5561B92095A36800B67467 /* SCNCreatureStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5561B82095A36800B67467 /* SCNCreatureStats.swift */; };
 		3D8D2CAA2085471F008C77CD /* SKPlayerStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D8D2CA92085471F008C77CD /* SKPlayerStats.swift */; };
 		3DA937172071BD3A0065E7E5 /* JSONData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA937162071BD3A0065E7E5 /* JSONData.swift */; };
 		3DA937222072F3200065E7E5 /* SCNField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DA937212072F3200065E7E5 /* SCNField.swift */; };
@@ -79,12 +89,11 @@
 		3D155D43206F225F0097B508 /* MyProjectUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyProjectUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D155D47206F225F0097B508 /* MyProjectUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyProjectUITests.swift; sourceTree = "<group>"; };
 		3D155D49206F225F0097B508 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3D155D55206F2FF90097B508 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		3D155D93206FFF5A0097B508 /* SCNCreature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNCreature.swift; sourceTree = "<group>"; };
 		3D155D9520705E7B0097B508 /* SCNCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNCard.swift; sourceTree = "<group>"; };
 		3D155D9720706A4A0097B508 /* Anchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anchor.swift; sourceTree = "<group>"; };
 		3D379E30207C60F5007AF687 /* SCNLife.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCNLife.swift; sourceTree = "<group>"; };
-		3D379E32207C7A59007AF687 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; };
+		3D379E32207C7A59007AF687 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		3D556181208A825400B67467 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		3D556186208A97B100B67467 /* GameRoomPlayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomPlayersView.swift; sourceTree = "<group>"; };
 		3D556188208A97E100B67467 /* GameRoomSpectatorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomSpectatorsView.swift; sourceTree = "<group>"; };
@@ -92,6 +101,17 @@
 		3D55618D208AAACA00B67467 /* GameRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameRoomViewController.swift; sourceTree = "<group>"; };
 		3D55618F20903D0B00B67467 /* SKHand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKHand.swift; sourceTree = "<group>"; };
 		3D55619120903EDB00B67467 /* SKCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKCard.swift; sourceTree = "<group>"; };
+		3D5561932093D63900B67467 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		3D5561A52093E46C00B67467 /* UserDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDetailTableViewController.swift; sourceTree = "<group>"; };
+		3D5561A62093E46C00B67467 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
+		3D5561A72093E46C00B67467 /* ConfirmForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmForgotPasswordViewController.swift; sourceTree = "<group>"; };
+		3D5561A82093E46C00B67467 /* SignInViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
+		3D5561A92093E46C00B67467 /* SignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		3D5561AA2093E46D00B67467 /* MFAViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MFAViewController.swift; sourceTree = "<group>"; };
+		3D5561AB2093E46D00B67467 /* ConfirmSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmSignUpViewController.swift; sourceTree = "<group>"; };
+		3D5561AC2093E46D00B67467 /* DevicesDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevicesDetailTableViewController.swift; sourceTree = "<group>"; };
+		3D5561B62093F4BB00B67467 /* MFAViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MFAViewController.xib; sourceTree = "<group>"; };
+		3D5561B82095A36800B67467 /* SCNCreatureStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNCreatureStats.swift; sourceTree = "<group>"; };
 		3D8D2CA92085471F008C77CD /* SKPlayerStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SKPlayerStats.swift; sourceTree = "<group>"; };
 		3DA937162071BD3A0065E7E5 /* JSONData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONData.swift; sourceTree = "<group>"; };
 		3DA937212072F3200065E7E5 /* SCNField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SCNField.swift; sourceTree = "<group>"; };
@@ -168,11 +188,12 @@
 				3D55618C208AAA7700B67467 /* Models */,
 				3D556185208A979300B67467 /* Views */,
 				3D556183208A826900B67467 /* Controllers */,
+				3D5561B62093F4BB00B67467 /* MFAViewController.xib */,
 				3D155D25206F225E0097B508 /* AppDelegate.swift */,
 				3D155D9720706A4A0097B508 /* Anchor.swift */,
-				3D155D55206F2FF90097B508 /* GameScene.swift */,
 				3DA937162071BD3A0065E7E5 /* JSONData.swift */,
 				3DED7DC82086FA9900B27625 /* TrayLauncher.swift */,
+				3D5561932093D63900B67467 /* Constants.swift */,
 				3DA93727207326AF0065E7E5 /* Util.swift */,
 				3D155D2B206F225E0097B508 /* Main.storyboard */,
 				3DA93729207337B10065E7E5 /* audio */,
@@ -207,6 +228,7 @@
 		3D556183208A826900B67467 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				3D5561B52093F47E00B67467 /* AWSCognito */,
 				3D556181208A825400B67467 /* MenuViewController.swift */,
 				3D155D29206F225E0097B508 /* ViewController.swift */,
 				3D55618D208AAACA00B67467 /* GameRoomViewController.swift */,
@@ -237,8 +259,24 @@
 				3DA93723207300B90065E7E5 /* SCNPlayer.swift */,
 				3DA9372520731FF60065E7E5 /* SCNHand.swift */,
 				3D55619120903EDB00B67467 /* SKCard.swift */,
+				3D5561B82095A36800B67467 /* SCNCreatureStats.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		3D5561B52093F47E00B67467 /* AWSCognito */ = {
+			isa = PBXGroup;
+			children = (
+				3D5561A72093E46C00B67467 /* ConfirmForgotPasswordViewController.swift */,
+				3D5561AB2093E46D00B67467 /* ConfirmSignUpViewController.swift */,
+				3D5561AC2093E46D00B67467 /* DevicesDetailTableViewController.swift */,
+				3D5561A62093E46C00B67467 /* ForgotPasswordViewController.swift */,
+				3D5561AA2093E46D00B67467 /* MFAViewController.swift */,
+				3D5561A82093E46C00B67467 /* SignInViewController.swift */,
+				3D5561A92093E46C00B67467 /* SignUpViewController.swift */,
+				3D5561A52093E46C00B67467 /* UserDetailTableViewController.swift */,
+			);
+			path = AWSCognito;
 			sourceTree = "<group>";
 		};
 		45D205412ACBB8B620037D79 /* Frameworks */ = {
@@ -382,6 +420,7 @@
 				3DA9372A207337B10065E7E5 /* audio in Resources */,
 				3D155D32206F225E0097B508 /* LaunchScreen.storyboard in Resources */,
 				3D155D2F206F225E0097B508 /* Assets.xcassets in Resources */,
+				3D5561B72093F4BB00B67467 /* MFAViewController.xib in Resources */,
 				3D155D2D206F225E0097B508 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -464,11 +503,17 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-MyProject/Pods-MyProject-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AWSCognitoIdentityProvider/AWSCognitoIdentityProvider.framework",
+				"${BUILT_PRODUCTS_DIR}/AWSCognitoIdentityProviderASF/AWSCognitoIdentityProviderASF.framework",
+				"${BUILT_PRODUCTS_DIR}/AWSCore/AWSCore.framework",
 				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift/SocketIO.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSCognitoIdentityProvider.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSCognitoIdentityProviderASF.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AWSCore.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 			);
@@ -487,25 +532,34 @@
 				3D55618B208A9F3A00B67467 /* GameRoomControlPanelView.swift in Sources */,
 				3D55619220903EDB00B67467 /* SKCard.swift in Sources */,
 				3DA93728207326AF0065E7E5 /* Util.swift in Sources */,
+				3D5561AF2093E46D00B67467 /* ConfirmForgotPasswordViewController.swift in Sources */,
 				3D155D94206FFF5A0097B508 /* SCNCreature.swift in Sources */,
 				3DA937222072F3200065E7E5 /* SCNField.swift in Sources */,
 				3D556189208A97E100B67467 /* GameRoomSpectatorsView.swift in Sources */,
-				3D155D56206F2FF90097B508 /* GameScene.swift in Sources */,
+				3D5561B32093E46D00B67467 /* ConfirmSignUpViewController.swift in Sources */,
+				3D5561B22093E46D00B67467 /* MFAViewController.swift in Sources */,
+				3D5561B42093E46D00B67467 /* DevicesDetailTableViewController.swift in Sources */,
+				3D5561942093D63900B67467 /* Constants.swift in Sources */,
 				3D8D2CAA2085471F008C77CD /* SKPlayerStats.swift in Sources */,
 				3DB536BF2081636B0062324A /* OverlayScene.swift in Sources */,
 				3D379E31207C60F5007AF687 /* SCNLife.swift in Sources */,
+				3D5561AE2093E46D00B67467 /* ForgotPasswordViewController.swift in Sources */,
 				3D556182208A825400B67467 /* MenuViewController.swift in Sources */,
+				3D5561B02093E46D00B67467 /* SignInViewController.swift in Sources */,
 				3D55619020903D0B00B67467 /* SKHand.swift in Sources */,
 				3D55618E208AAACA00B67467 /* GameRoomViewController.swift in Sources */,
 				3DA9372620731FF60065E7E5 /* SCNHand.swift in Sources */,
+				3D5561AD2093E46D00B67467 /* UserDetailTableViewController.swift in Sources */,
 				3DA93724207300B90065E7E5 /* SCNPlayer.swift in Sources */,
 				3DED7DC92086FA9900B27625 /* TrayLauncher.swift in Sources */,
 				3D556187208A97B100B67467 /* GameRoomPlayersView.swift in Sources */,
+				3D5561B12093E46D00B67467 /* SignUpViewController.swift in Sources */,
 				3D155D9620705E7B0097B508 /* SCNCard.swift in Sources */,
 				3D155D2A206F225E0097B508 /* ViewController.swift in Sources */,
 				3DA937172071BD3A0065E7E5 /* JSONData.swift in Sources */,
 				3D155D9820706A4A0097B508 /* Anchor.swift in Sources */,
 				3D155D26206F225E0097B508 /* AppDelegate.swift in Sources */,
+				3D5561B92095A36800B67467 /* SCNCreatureStats.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
